@@ -1,0 +1,26 @@
+.NavigationItem {
+  text-align: center;
+  border: 1px solid #ebeef2;
+  list-style: none;
+  align-self: flex-end;
+  border-radius: 5px;
+  padding: 1rem;
+  margin: 1rem 0.5rem;
+  font-size: 1.5rem;
+  box-shadow: 2px 2px 3px #ebeef2;
+  transition: transform 0.2s;
+}
+
+.NavigationItem:hover {
+  transform: scale(1.05);
+}
+
+.Primary {
+  background-color: #469cd0;
+  color: white;
+}
+
+.Secondary {
+  color: #469cd0;
+  background-color: white;
+}

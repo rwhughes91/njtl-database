@@ -1,0 +1,24 @@
+.Navigation {
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 15%;
+  width: 85%;
+  height: 7rem;
+}
+
+@media (max-width: 769px) {
+  .Navigation {
+    left: 0%;
+    width: 100%;
+  }
+}
+
+.Breadcrumb {
+  font-size: 2.5rem;
+  color: #707070;
+  padding: 0.3rem 1rem;
+}

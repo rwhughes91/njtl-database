@@ -1,0 +1,72 @@
+.SideNavigation {
+  height: 100%;
+  width: 15%;
+  background-color: #32373d;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  overflow-x: hidden;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  text-align: center;
+}
+
+@media (max-width: 769px) {
+  .SideNavigation {
+    display: none;
+  }
+}
+
+.SideNavigationTitle {
+  color: #ffffff;
+  border-bottom: 0.1rem solid #ffffff;
+  font-size: 1.75rem;
+  text-align: center;
+  height: 7rem;
+  padding-top: 1rem;
+}
+
+.SideNavigationTitle span::before {
+  content: '\A';
+  white-space: pre;
+}
+
+.SideNavigationInput {
+  width: 65%;
+  padding: 1rem;
+  margin: 1rem;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.SideNavigationItems {
+  list-style: none;
+  color: #ffffff;
+  text-align: center;
+  border: none;
+}
+
+.SideNavigationItems li {
+  font-size: 2rem;
+  padding: 1rem;
+}
+.SideNavigationItems li:hover {
+  background-color: #464f56;
+}
+
+.SideNavigationItems li.active {
+  background-color: #464f56;
+}
+
+.Help {
+  color: #e0e5eb;
+  margin-bottom: 1rem;
+  display: block;
+  text-decoration: none;
+}
