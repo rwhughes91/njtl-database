@@ -1,8 +1,9 @@
 import React from 'react';
+
 import classes from './Layout.module.css';
 
-import Navigation from '../Navigation/Navigation';
-
-const Layout = (props) => <Navigation />;
+const Layout = (props) => (
+  <main className={classes.Main}>{props.children}</main>
+);
 
 export default Layout;

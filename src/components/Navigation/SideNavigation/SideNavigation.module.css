@@ -43,6 +43,15 @@
   border-radius: 10px;
   font-size: 1.5rem;
   text-align: center;
+  transition: transform 0.2s;
+}
+
+.SideNavigationInput:hover {
+  transform: scale(1.1);
+}
+
+.SideNavigationInput:focus::placeholder {
+  color: transparent;
 }
 
 .SideNavigationItems {
@@ -50,18 +59,6 @@
   color: #ffffff;
   text-align: center;
   border: none;
-}
-
-.SideNavigationItems li {
-  font-size: 2rem;
-  padding: 1rem;
-}
-.SideNavigationItems li:hover {
-  background-color: #464f56;
-}
-
-.SideNavigationItems li.active {
-  background-color: #464f56;
 }
 
 .Help {

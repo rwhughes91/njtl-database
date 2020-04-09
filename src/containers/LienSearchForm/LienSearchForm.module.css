@@ -1,0 +1,12 @@
+.LienSearchForm {
+  display: flex;
+  flex-flow: column;
+}
+
+.FormGroup {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  width: 90%;
+  margin: 1.5rem 0 0;
+}

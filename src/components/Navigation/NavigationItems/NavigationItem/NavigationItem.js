@@ -1,15 +1,24 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 import classes from './NavigationItem.module.css';
 
 const NavigationItem = (props) => {
-  const styleClasses = [classes.NavigationItem];
+  const styleClasses = [];
   if (props.type === 'primary') {
-    styleClasses.push(classes.Primary);
+    styleClasses.push(classes.NavigationItem, classes.Primary);
+  } else if (props.type === 'secondary') {
+    styleClasses.push(classes.NavigationItem, classes.Secondary);
   } else {
-    styleClasses.push(classes.Secondary);
+    styleClasses.push(classes.SideNavigationItem);
   }
-  return <li className={styleClasses.join(' ')}>{props.children}</li>;
+  return (
+    <li className={styleClasses.join(' ')}>
+      <NavLink to={props.link} exact activeClassName={classes.active}>
+        {props.children}
+      </NavLink>
+    </li>
+  );
 };
 
 export default NavigationItem;

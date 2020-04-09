@@ -6,8 +6,12 @@ import NavigationItem from './NavigationItem/NavigationItem';
 
 const NavigationItems = (props) => (
   <ul className={classes.NavigationItems}>
-    <NavigationItem type='primary'>Dashboard</NavigationItem>
-    <NavigationItem type='secondary'>Logout</NavigationItem>
+    <NavigationItem link='/dashboard' type='primary'>
+      Dashboard
+    </NavigationItem>
+    <NavigationItem link='/logout' type='secondary'>
+      Logout
+    </NavigationItem>
   </ul>
 );
 

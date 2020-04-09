@@ -3,6 +3,7 @@ import React from 'react';
 import classes from './SideNavigation.module.css';
 
 // import DrawerToggler from './DrawerToggler/DrawerToggler';
+import NavigationItem from '../NavigationItems/NavigationItem/NavigationItem';
 
 const SideNavigation = (props) => {
   return (
@@ -16,10 +17,10 @@ const SideNavigation = (props) => {
           placeholder='Search by Lien ID...'
         />
         <ul className={classes.SideNavigationItems}>
-          <li>Home</li>
-          <li>Upload</li>
-          <li>Subs</li>
-          <li>Reports</li>
+          <NavigationItem link='/'>Home</NavigationItem>
+          <NavigationItem link='/upload'>Upload</NavigationItem>
+          <NavigationItem link='/subs'>Subs</NavigationItem>
+          <NavigationItem link='/reports'>Reports</NavigationItem>
         </ul>
       </div>
       <div>

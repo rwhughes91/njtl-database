@@ -9,10 +9,20 @@
   font-size: 1.5rem;
   box-shadow: 2px 2px 3px #ebeef2;
   transition: transform 0.2s;
+  cursor: pointer;
 }
 
 .NavigationItem:hover {
   transform: scale(1.05);
+}
+
+.NavigationItem:active {
+  transform: scale(1);
+}
+
+.NavigationItem a {
+  text-decoration: none;
+  color: inherit;
 }
 
 .Primary {
@@ -23,4 +33,28 @@
 .Secondary {
   color: #469cd0;
   background-color: white;
+}
+
+.SideNavigationItem a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  font-size: 2rem;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.SideNavigationItem a:hover {
+  background-color: #464f56;
+  transform: scale(1.1);
+}
+
+.SideNavigationItem a:active {
+  transform: scale(1);
+}
+
+.SideNavigationItem a.active {
+  background-color: #464f56;
 }

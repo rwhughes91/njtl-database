@@ -1,0 +1,13 @@
+.Main {
+  position: absolute;
+  left: 15%;
+  top: 7rem;
+  width: 85%;
+}
+
+@media (max-width: 769px) {
+  .Main {
+    left: 0;
+    width: 100%;
+  }
+}

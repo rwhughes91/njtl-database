@@ -1,0 +1,40 @@
+.Button {
+  outline: none;
+  cursor: pointer;
+  font: inherit;
+  text-align: center;
+  border: 1px solid #ebeef2;
+  box-shadow: 2px 2px 3px #ebeef2;
+  padding: 1rem 1.5rem;
+  margin: 0 0.5rem;
+  transition: transform 0.2s;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.Button:hover {
+  transform: scale(1.05);
+}
+
+.Button:active {
+  transform: scale(1);
+}
+
+.Button:disabled {
+  cursor: not-allowed;
+}
+
+.Primary {
+  background-color: #469cd0;
+  color: white;
+}
+
+.Secondary {
+  color: #469cd0;
+  background-color: white;
+}
+
+.Danger {
+  background-color: #f13b3b;
+  color: white;
+}
