@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
+
 import classes from './LienSearchForm.module.css';
 
 import Input from '../../components/UI/Input/Input';
@@ -11,18 +12,26 @@ const LienSearchForm = (props) => {
   const [formIsValid, setFormIsValid] = useState(false);
   const [controls, setControls] = useState(formControls);
 
-  const inputChangedHandler = useCallback(
-    (event, controlName) => {
+  const formState = useRef(controls);
+  const timer = useRef(0);
+
+  const validateInputTimer = (validatorFn) => {
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+    timer.current = setTimeout(validatorFn, 1000);
+  };
+
+  const validateInputHandler = useCallback((value, controlName) => {
+    if (value.length > 0) {
       const [valid, errorMessage] = formValidation(
-        event.target.value,
-        controls[controlName].validation
+        value,
+        formState.current[controlName].validation
       );
       const updatedControls = {
-        ...controls,
+        ...formState.current,
         [controlName]: {
-          ...controls[controlName],
-          value: event.target.value,
-          touched: true,
+          ...formState.current[controlName],
           valid,
           errorMessage,
         },
@@ -33,13 +42,52 @@ const LienSearchForm = (props) => {
       }
       setFormIsValid(formIsValid);
       setControls(updatedControls);
-    },
-    [controls]
-  );
+    }
+  }, []);
 
-  const blurHandler = (event, controlName) => {
-    console.log(controls[controlName].errorMessage);
-  };
+  const inputChangedHandler = useCallback(
+    (event, controlName) => {
+      const value = event.target.value;
+      let updatedControls;
+      if (event.target.value.length > 0) {
+        const [valid] = formValidation(
+          event.target.value,
+          controls[controlName].validation
+        );
+        updatedControls = {
+          ...controls,
+          [controlName]: {
+            ...controls[controlName],
+            touched: true,
+            value,
+            valid,
+          },
+        };
+        let formIsValid = false;
+        for (let inputIdentifier in updatedControls) {
+          formIsValid = updatedControls[inputIdentifier].valid || formIsValid;
+        }
+        setFormIsValid(formIsValid);
+      } else {
+        updatedControls = {
+          ...controls,
+          [controlName]: {
+            ...controls[controlName],
+            value: event.target.value,
+            touched: false,
+            valid: false,
+            errorMessage: '',
+          },
+        };
+      }
+      formState.current = updatedControls;
+      setControls(updatedControls);
+      validateInputTimer(() => {
+        validateInputHandler(value, controlName);
+      });
+    },
+    [controls, validateInputHandler]
+  );
 
   const resetHandler = (event) => {
     event.preventDefault();
@@ -65,13 +113,12 @@ const LienSearchForm = (props) => {
       elementType: formElement.config.elementType,
       elementConfig: formElement.config.elementConfig,
       value: formElement.config.value,
-      invalid: !formElement.config.valid,
       shouldValidate: formElement.config.validation,
       touched: formElement.config.touched,
       label: formElement.config.elementConfig.placeholder,
       errorMessage: formElement.config.errorMessage,
+      invalid: formElement.config.errorMessage.length > 0,
       changed: (event) => inputChangedHandler(event, formElement.id),
-      blurred: (event) => blurHandler(event, formElement.id),
     };
     return <Input {...props} />;
   });

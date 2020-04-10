@@ -19,6 +19,8 @@ const Input = (props) => {
           {...props.elementConfig}
           value={props.value}
           onChange={props.changed}
+          onBlur={props.blurred}
+          onMouseLeave={props.mouseExited}
         />
       );
       break;
@@ -29,6 +31,8 @@ const Input = (props) => {
           className={inputClasses.join(' ')}
           onChange={props.changed}
           value={props.value}
+          onBlur={props.blurred}
+          onMouseLeave={props.mouseExited}
         >
           <option value=''>Select...</option>
           {props.elementConfig.options.map((option) => (
@@ -47,6 +51,7 @@ const Input = (props) => {
           value={props.value}
           onChange={props.changed}
           onBlur={props.blurred}
+          onMouseLeave={props.mouseExited}
         />
       );
   }

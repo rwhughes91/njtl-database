@@ -4,20 +4,23 @@ const formValidation = (value, rules) => {
   if (rules.required) {
     isValid = value.trim() !== '' && isValid;
     if (!isValid) {
-      errorMessage = 'This field is required';
+      errorMessage = 'Field required';
     }
+    return [isValid, errorMessage];
   }
   if (rules.minLength) {
     isValid = value.length >= rules.minLength && isValid;
     if (!isValid) {
-      errorMessage = `Field needs to be >= ${rules.minLength} chars`;
+      errorMessage = `Must be over ${rules.minLength - 1} chars`;
     }
+    return [isValid, errorMessage];
   }
   if (rules.maxLength) {
     isValid = value.length <= rules.maxLength && isValid;
     if (!isValid) {
-      errorMessage = `Field needs to be <= ${rules.maxLength} chars`;
+      errorMessage = `Must be under ${rules.maxLength + 1} chars`;
     }
+    return [isValid, errorMessage];
   }
   return [isValid, errorMessage];
 };

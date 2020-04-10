@@ -7,6 +7,7 @@ const Button = (props) => (
     disabled={props.disabled}
     onClick={props.clicked}
     className={[classes.Button, classes[props.btnType]].join(' ')}
+    onMouseEnter={props.hovered}
   >
     {props.children}
   </button>
