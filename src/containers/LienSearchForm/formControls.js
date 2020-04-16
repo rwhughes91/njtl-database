@@ -6,7 +6,7 @@ const formControls = {
       placeholder: 'Block',
     },
     value: '',
-    validation: { minLength: 4 },
+    validation: {},
     valid: false,
     touched: false,
     errorMessage: '',
@@ -54,7 +54,7 @@ const formControls = {
       placeholder: 'Sale Year',
     },
     value: '',
-    validation: { maxLength: 4, minLength: 4 },
+    validation: {},
     valid: false,
     touched: false,
     errorMessage: '',
@@ -71,7 +71,7 @@ const formControls = {
     touched: false,
     errorMessage: '',
   },
-  township: {
+  county: {
     elementType: 'select',
     elementConfig: {
       options: [

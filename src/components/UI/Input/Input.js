@@ -7,7 +7,7 @@ const Input = (props) => {
   const inputContainerClasses = [classes.Input];
   const inputClasses = [classes.InputElement];
 
-  if (props.invalid && props.shouldValidate && props.touched) {
+  if (props.invalid && props.touched) {
     inputClasses.push(classes.Invalid);
   }
 
@@ -67,4 +67,12 @@ const Input = (props) => {
   );
 };
 
-export default Input;
+export default React.memo(Input, (prevProps, nextProps) => {
+  const props = ['value', 'touched', 'invalid'];
+  for (let prop of props) {
+    if (!(prevProps[prop] === nextProps[prop])) {
+      return false;
+    }
+  }
+  return true;
+});

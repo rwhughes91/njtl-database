@@ -1,6 +1,8 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useReducer, useCallback, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 
 import classes from './LienSearchForm.module.css';
+import * as actions from '../../store/actions/index';
 
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
@@ -8,112 +10,154 @@ import Button from '../../components/UI/Button/Button';
 import formControls from './formControls';
 import formValidation from './formValidation';
 
-const LienSearchForm = (props) => {
-  const [formIsValid, setFormIsValid] = useState(false);
-  const [controls, setControls] = useState(formControls);
+const initialState = {
+  controls: formControls,
+  formIsValid: false,
+};
 
-  const formState = useRef(controls);
+const LienSearchFormReducer = (state, action) => {
+  switch (action.type) {
+    case 'UPDATE_FIELD':
+      const updatedControls = {
+        formIsValid: action.formIsValid
+          ? action.formIsValid
+          : state.formIsValid,
+        controls: {
+          ...state.controls,
+          [action.controlName]: {
+            ...state.controls[action.controlName],
+            ...action.data,
+          },
+        },
+      };
+      return updatedControls;
+    case 'RESET_FORM':
+      return initialState;
+    default:
+      throw new Error('Action type not recognized');
+  }
+};
+
+const LienSearchForm = () => {
+  const [formData, setFormData] = useReducer(
+    LienSearchFormReducer,
+    initialState
+  );
+
+  const dispatch = useDispatch();
   const timer = useRef(0);
+  const lastQuery = useRef(null);
 
-  const validateInputTimer = (validatorFn) => {
+  const validateInputTimer = useCallback((validatorFn) => {
     if (timer.current) {
       clearTimeout(timer.current);
     }
     timer.current = setTimeout(validatorFn, 1000);
-  };
-
-  const validateInputHandler = useCallback((value, controlName) => {
-    if (value.length > 0) {
-      const [valid, errorMessage] = formValidation(
-        value,
-        formState.current[controlName].validation
-      );
-      const updatedControls = {
-        ...formState.current,
-        [controlName]: {
-          ...formState.current[controlName],
-          valid,
-          errorMessage,
-        },
-      };
-      let formIsValid = false;
-      for (let inputIdentifier in updatedControls) {
-        formIsValid = updatedControls[inputIdentifier].valid || formIsValid;
-      }
-      setFormIsValid(formIsValid);
-      setControls(updatedControls);
-    }
   }, []);
 
-  const inputChangedHandler = useCallback(
-    (event, controlName) => {
-      const value = event.target.value;
-      let updatedControls;
-      if (event.target.value.length > 0) {
-        const [valid] = formValidation(
-          event.target.value,
-          controls[controlName].validation
+  const validateInputHandler = useCallback(
+    (value, controlName) => {
+      if (value.length > 0) {
+        const [valid, errorMessage] = formValidation(
+          value,
+          formData.controls[controlName].validation
         );
-        updatedControls = {
-          ...controls,
-          [controlName]: {
-            ...controls[controlName],
-            touched: true,
-            value,
+        const updatedControls = {
+          controlName,
+          data: {
             valid,
+            errorMessage,
           },
         };
         let formIsValid = false;
         for (let inputIdentifier in updatedControls) {
           formIsValid = updatedControls[inputIdentifier].valid || formIsValid;
         }
-        setFormIsValid(formIsValid);
+        updatedControls.formIsValid = formIsValid;
+        setFormData(Object.assign({ type: 'UPDATE_FIELD' }, updatedControls));
+      }
+    },
+    [formData]
+  );
+
+  const inputChangedHandler = useCallback(
+    (event, controlName) => {
+      const value = event.target.value;
+      let updatedControls;
+      if (value.length > 0) {
+        const [valid] = formValidation(
+          value,
+          formData.controls[controlName].validation
+        );
+        updatedControls = {
+          controlName,
+          data: {
+            touched: true,
+            valid,
+            value,
+          },
+        };
+        let formIsValid = false;
+        for (let inputIdentifier in updatedControls) {
+          formIsValid = updatedControls[inputIdentifier].valid || formIsValid;
+        }
+        updatedControls.formIsValid = formIsValid;
       } else {
         updatedControls = {
-          ...controls,
-          [controlName]: {
-            ...controls[controlName],
-            value: event.target.value,
+          controlName,
+          data: {
             touched: false,
             valid: false,
             errorMessage: '',
+            value,
           },
         };
       }
-      formState.current = updatedControls;
-      setControls(updatedControls);
+      setFormData(Object.assign({ type: 'UPDATE_FIELD' }, updatedControls));
       validateInputTimer(() => {
         validateInputHandler(value, controlName);
       });
     },
-    [controls, validateInputHandler]
+    [formData, validateInputTimer, validateInputHandler]
   );
 
-  const resetHandler = (event) => {
+  const resetHandler = useCallback((event) => {
     event.preventDefault();
-    setFormIsValid(false);
-    setControls(formControls);
-  };
+    setFormData({ type: 'RESET_FORM' });
+  }, []);
 
-  const submitHandler = (event) => {
-    event.preventDefault();
-  };
+  const submitHandler = useCallback(
+    async (event) => {
+      event.preventDefault();
+      const variables = {};
+      for (let key in formData.controls) {
+        if (key === 'county' && !formData.controls[key].touched) {
+          continue;
+        }
+        variables[key] = formData.controls[key].value;
+      }
+      if (!(lastQuery.current === JSON.stringify(variables))) {
+        lastQuery.current = JSON.stringify(variables);
+        dispatch(actions.fetchLiens(variables));
+      }
+    },
+    [dispatch, formData.controls]
+  );
 
   const formElementsArray = [];
-  for (let key in controls) {
+  for (let key in formData.controls) {
     formElementsArray.push({
       id: key,
-      config: controls[key],
+      config: formData.controls[key],
     });
   }
 
-  const formElements = formElementsArray.map((formElement, index) => {
+  const formElements = formElementsArray.map((formElement) => {
     const props = {
       key: formElement.id,
       elementType: formElement.config.elementType,
       elementConfig: formElement.config.elementConfig,
       value: formElement.config.value,
-      shouldValidate: formElement.config.validation,
       touched: formElement.config.touched,
       label: formElement.config.elementConfig.placeholder,
       errorMessage: formElement.config.errorMessage,
@@ -132,7 +176,7 @@ const LienSearchForm = (props) => {
           <Button
             btnType='Primary'
             clicked={submitHandler}
-            disabled={!formIsValid}
+            disabled={!formData.formIsValid}
           >
             Submit
           </Button>
@@ -147,4 +191,4 @@ const LienSearchForm = (props) => {
   return form;
 };
 
-export default LienSearchForm;
+export default React.memo(LienSearchForm);
