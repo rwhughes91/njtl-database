@@ -35,7 +35,7 @@ const formControls = {
     touched: false,
     errorMessage: '',
   },
-  certificateNumber: {
+  certificate_number: {
     elementType: 'input',
     elementConfig: {
       type: 'text',
@@ -47,7 +47,7 @@ const formControls = {
     touched: false,
     errorMessage: '',
   },
-  saleYear: {
+  sale_year: {
     elementType: 'input',
     elementConfig: {
       type: 'text',

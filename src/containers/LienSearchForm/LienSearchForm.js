@@ -82,9 +82,12 @@ const LienSearchForm = () => {
 
   const inputChangedHandler = useCallback(
     (event, controlName) => {
-      const value = event.target.value;
+      let value = event.target.value;
+      if (controlName === 'sale_year') {
+        value = parseInt(value);
+      }
       let updatedControls;
-      if (value.length > 0) {
+      if (event.target.value.length > 0) {
         const [valid] = formValidation(
           value,
           formData.controls[controlName].validation
