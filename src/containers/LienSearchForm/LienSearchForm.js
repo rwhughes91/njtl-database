@@ -129,7 +129,9 @@ const LienSearchForm = () => {
   const submitHandler = useCallback(
     async (event) => {
       event.preventDefault();
-      const variables = {};
+      const variables = {
+        skip: 0,
+      };
       for (let key in formData.controls) {
         if (key === 'county' && !formData.controls[key].touched) {
           continue;

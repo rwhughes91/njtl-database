@@ -18,6 +18,8 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         liens: action.liens,
+        lastQueryVariables: action.variables,
+        lastQueryCount: action.count,
       };
     case actionTypes.FETCH_LIENS_FAIL:
       return {

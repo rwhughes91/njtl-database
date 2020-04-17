@@ -1,0 +1,43 @@
+.LienSearchList {
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+}
+
+.LienSearchList th {
+  color: #32373d;
+  font-size: 1.3rem;
+  font-weight: 400;
+  padding-bottom: 0.5rem;
+}
+
+.LienSearchList td {
+  border-top: 1px solid #ebeef2;
+  padding: 1rem 0;
+  font-size: 1.2rem;
+  color: #707070;
+}
+
+.LienSearchList tr:last-child {
+  border-bottom: 1px solid white;
+}
+
+.LienSearchList tr:hover td {
+  color: #32373d;
+  cursor: pointer;
+  border-bottom: 1px solid #bcbec1;
+  border-top: 1px solid #bcbec1;
+}
+
+.NoLiensFound {
+  font-weight: bold;
+  font-size: 1.3rem;
+  text-align: center;
+  padding: 0.5rem 1rem 1rem;
+}
+
+.Pagination {
+  padding: 0.5rem 2rem;
+  display: flex;
+  flex-flow: row-reverse;
+}

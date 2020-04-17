@@ -1,0 +1,50 @@
+.Pagination {
+  display: flex;
+  list-style: none;
+  cursor: pointer;
+}
+
+.PaginationItem {
+  border: 1px solid #ebeef2;
+  border-left: none;
+}
+
+.PaginationItem:hover:not(.ActivePaginationItem) {
+  background-color: #ebeef2;
+}
+
+.PaginationItem:first-child {
+  border-left: 1px solid #ebeef2;
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
+
+.PaginationItem:last-child {
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
+.PaginationItemText {
+  color: #464f56;
+  font-size: 1rem;
+  text-decoration: none;
+  outline: none;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem 1rem;
+}
+
+.ActivePaginationItem {
+  background-color: #469cd0;
+  border: 1px solid #469cd0;
+}
+
+.ActivePaginationItemText {
+  color: white;
+  outline: none;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem 1rem;
+}

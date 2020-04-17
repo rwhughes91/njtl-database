@@ -13,10 +13,12 @@ export const fetchLiensStart = () => {
   };
 };
 
-export const fetchLiensSuccess = (liens) => {
+export const fetchLiensSuccess = (liens, variables, count) => {
   return {
     type: actionTypes.FETCH_LIENS_SUCCESS,
     liens,
+    variables,
+    count,
   };
 };
 
