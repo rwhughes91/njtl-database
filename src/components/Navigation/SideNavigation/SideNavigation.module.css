@@ -1,6 +1,6 @@
 .SideNavigation {
   height: 100%;
-  width: 15%;
+  width: 10%;
   background-color: #32373d;
   position: fixed;
   top: 0;
@@ -22,7 +22,7 @@
 .SideNavigationTitle {
   color: #ffffff;
   border-bottom: 0.1rem solid #ffffff;
-  font-size: 1.75rem;
+  font-size: 2rem;
   text-align: center;
   height: 7rem;
   padding-top: 1rem;

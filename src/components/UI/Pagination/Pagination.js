@@ -6,7 +6,7 @@ import ReactPaginate from 'react-paginate';
 const Pagination = (props) => (
   <ReactPaginate
     pageCount={props.pageCount}
-    initialPage={0}
+    initialPage={props.initialPage}
     onPageChange={props.nextPageHandler}
     disableInitialCallback={true}
     pageRangeDisplayed={3}

@@ -1,8 +1,8 @@
 .Main {
   position: absolute;
-  left: 15%;
+  left: 10%;
   top: 7rem;
-  width: 85%;
+  width: 90%;
 }
 
 @media (max-width: 769px) {

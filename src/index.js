@@ -9,6 +9,7 @@ import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
 import lienSearchReducer from './store/reducers/lienSearch';
+import lienDetailReducer from './store/reducers/lienDetail';
 import rootSaga from './store/sagas/index';
 
 import './index.css';
@@ -20,6 +21,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
   lienSearch: lienSearchReducer,
+  lienDetail: lienDetailReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

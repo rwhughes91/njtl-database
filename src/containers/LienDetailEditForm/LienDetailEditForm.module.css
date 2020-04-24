@@ -1,0 +1,163 @@
+.LienDetailEditForm {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+}
+
+.FormGroup {
+  display: flex;
+  flex-flow: row;
+  margin-bottom: 2rem;
+}
+
+.FormType {
+  background-color: #ffffff;
+  padding: 3.5rem 2.5rem 2.5rem 2.5rem;
+  border-radius: 1rem;
+  display: flex;
+  flex-flow: row;
+  flex-wrap: nowrap;
+  width: 40%;
+  margin: 0 2rem;
+}
+
+.FormTypeShort {
+  height: 30rem;
+}
+
+.FormColumn {
+  display: flex;
+  flex-flow: column;
+  width: 50%;
+}
+
+.FormColumnFull {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  justify-content: center;
+}
+
+.FormRow {
+  display: flex;
+  flex-flow: row;
+}
+
+.FormRowLarge {
+  height: 200% !important;
+  position: relative;
+  top: -1.5rem;
+}
+
+.Input {
+  padding: 1rem;
+  width: 100%;
+}
+
+.Label {
+  font-weight: bold;
+  display: block;
+  position: relative;
+  color: #707070;
+  font-weight: 400;
+  font-size: 1.4rem;
+  position: relative;
+  right: -0.4rem;
+  transition: transform 0.2s;
+  transform: translateY(-4.5rem);
+}
+
+.InputElement {
+  outline: none;
+  font: inherit;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  height: 2.5rem;
+  border-radius: 5px;
+  border: 0.1rem solid #ebeef2;
+  padding: 0 0.5rem;
+  font-size: 1.4rem;
+  color: #32373d;
+}
+
+.InputElement:read-only:not(select) {
+  background-color: #ebeef2;
+  color: #707070;
+}
+
+.InputElement:placeholder-shown + .Label {
+  transform: translateY(-2rem);
+  visibility: hidden;
+  opacity: 0;
+}
+
+.InputTextArea {
+  height: 100%;
+}
+
+.Invalid {
+  border: 1px solid red;
+}
+
+.ErrorMessage {
+  position: absolute;
+  top: 2.5rem;
+  color: red;
+  transition: opacity 0.4s;
+  opacity: 1;
+}
+
+.ErrorMessage:empty {
+  opacity: 0;
+}
+
+.Title {
+  position: absolute;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #469cd0;
+}
+
+.Title span {
+  position: absolute;
+  top: -3.2rem;
+  display: block;
+  width: 20rem;
+}
+
+.SubTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  table-layout: fixed;
+}
+
+.SubTable th {
+  font-weight: normal;
+  font-size: 1.4rem;
+  padding: 0.5rem;
+}
+
+.SubTable td {
+  border-top: 1px solid #ebeef2;
+  padding: 0.5rem 0;
+  font-size: 1.4rem;
+  width: 25%;
+  color: #707070;
+}
+
+.NoSubTable {
+  font-size: 1.7rem;
+  width: 50%;
+  margin: auto;
+  text-align: center;
+  position: relative;
+  top: -2rem;
+  color: #32373d;
+}
+
+.ButtonContainer {
+  display: flex;
+  margin: 0 0 0.5rem 0.5rem;
+}

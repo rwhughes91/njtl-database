@@ -1,31 +1,29 @@
 import React from 'react';
 
-import classes from './Input.module.css';
-
 const Input = (props) => {
   let inputElement = null;
-  const inputContainerClasses = [classes.Input];
-  const inputClasses = [classes.InputElement];
+  const inputContainerClasses = [props.containerClassName];
+  const inputClasses = [props.className];
 
   if (props.invalid && props.touched) {
-    inputClasses.push(classes.Invalid);
+    inputClasses.push(props.invalidClassName);
   }
-
+  let label = true;
   switch (props.elementType) {
     case 'textarea':
+      label = false;
       inputElement = (
         <textarea
           className={inputClasses.join(' ')}
-          {...props.elementConfig}
           value={props.value}
           onChange={props.changed}
           onBlur={props.blurred}
           onMouseLeave={props.mouseExited}
+          {...props.elementConfig}
         />
       );
       break;
     case 'select':
-      inputContainerClasses.push(classes.InputLarge);
       inputElement = (
         <select
           className={inputClasses.join(' ')}
@@ -43,26 +41,38 @@ const Input = (props) => {
         </select>
       );
       break;
+    case 'frozenInput':
+      inputElement = (
+        <input
+          readOnly
+          className={inputClasses.join(' ')}
+          value={props.value}
+          onBlur={props.blurred}
+          onMouseLeave={props.mouseExited}
+          {...props.elementConfig}
+        />
+      );
+      break;
     default:
       inputElement = (
         <input
           className={inputClasses.join(' ')}
-          {...props.elementConfig}
           value={props.value}
           onChange={props.changed}
           onBlur={props.blurred}
           onMouseLeave={props.mouseExited}
+          {...props.elementConfig}
         />
       );
   }
   const error = (
-    <span className={classes.ErrorMessage}>{props.errorMessage}</span>
+    <span className={props.errorMessageClassName}>{props.errorMessage}</span>
   );
   return (
     <div className={inputContainerClasses.join(' ')}>
       {error}
       {inputElement}
-      <label className={classes.Label}>{props.label}</label>
+      {label && <label className={props.labelClassName}>{props.label}</label>}
     </div>
   );
 };

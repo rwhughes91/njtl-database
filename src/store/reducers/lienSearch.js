@@ -17,6 +17,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loading: false,
+        error: null,
         liens: action.liens,
         lastQueryVariables: action.variables,
         lastQueryCount: action.count,

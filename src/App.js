@@ -1,8 +1,9 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Navigation from './components/Navigation/Navigation';
-import LienSearch from './components/LienSearch/LienSearch';
 import Layout from './components/Layout/Layout';
+import LienSearch from './containers/LienSearch/LienSearch';
+import LienDetail from './containers/LienDetail/LienDetail';
 
 function App() {
   return (
@@ -10,7 +11,12 @@ function App() {
       <Navigation />
       <Layout>
         <Switch>
-          <Route path='/' component={LienSearch} />
+          <Route path='/lien/:lien_id' exact>
+            <LienDetail />
+          </Route>
+          <Route path='/'>
+            <LienSearch />
+          </Route>
         </Switch>
       </Layout>
     </>

@@ -1,12 +1,15 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import classes from './LienSearchList.module.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import Pagination from '../../components/UI/Pagination/Pagination';
 import * as actions from '../../store/actions/index';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 const maxCount = parseInt(process.env.REACT_APP_MAX_COUNT);
 
 const LienSearchList = () => {
+  const loading = useSelector((state) => state.lienSearch.loading);
   const liens = useSelector((state) => state.lienSearch.liens);
   const lastQueryCount = useSelector(
     (state) => state.lienSearch.lastQueryCount
@@ -14,7 +17,9 @@ const LienSearchList = () => {
   const lastQueryVariables = useSelector(
     (state) => state.lienSearch.lastQueryVariables
   );
+  const lienError = useSelector((state) => state.lienDetail.error);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const nextPageHandler = (selectedPage) => {
     const { selected } = selectedPage;
@@ -26,6 +31,13 @@ const LienSearchList = () => {
     dispatch(actions.fetchLiens(variables));
   };
 
+  const tableRowClickHandler = (id) => {
+    if (lienError) {
+      dispatch(actions.clearLienError());
+    }
+    history.push(`/lien/${id}`);
+  };
+
   let pagination = null;
   if (lastQueryCount > maxCount) {
     pagination = (
@@ -33,6 +45,7 @@ const LienSearchList = () => {
         <Pagination
           pageCount={Math.ceil(lastQueryCount / maxCount)}
           nextPageHandler={nextPageHandler}
+          initialPage={Math.floor(lastQueryVariables.skip / 100)}
         />
       </div>
     );
@@ -55,7 +68,7 @@ const LienSearchList = () => {
               </tr>
             </thead>
             <tbody>
-              {liens.map((lien, index) => {
+              {liens.map((lien) => {
                 const tds = [];
                 for (let key in lien) {
                   if (key === 'sale_date') {
@@ -65,7 +78,14 @@ const LienSearchList = () => {
                     tds.push(<td key={key}>{lien[key]}</td>);
                   }
                 }
-                return <tr key={index}>{tds}</tr>;
+                return (
+                  <tr
+                    key={lien.lien_id}
+                    onClick={() => tableRowClickHandler(lien.lien_id)}
+                  >
+                    {tds}
+                  </tr>
+                );
               })}
             </tbody>
           </table>
@@ -75,9 +95,11 @@ const LienSearchList = () => {
     } else {
       return <div className={classes.NoLiensFound}>No liens found</div>;
     }
+  } else if (loading) {
+    return <Spinner bgColor='white' />;
   } else {
     return null;
   }
 };
 
-export default LienSearchList;
+export default React.memo(LienSearchList);
