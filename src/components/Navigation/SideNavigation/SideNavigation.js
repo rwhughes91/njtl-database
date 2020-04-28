@@ -11,7 +11,8 @@ const SideNavigation = (props) => {
   const dispatch = useDispatch();
   const onSubmitHandler = (event) => {
     if (event.key === 'Enter') {
-      dispatch(actions.clearLienError());
+      dispatch(actions.clearLien());
+      dispatch(actions.clearLiens());
       history.push(`/lien/${event.target.value}`);
       event.target.value = '';
       event.target.blur();
@@ -29,10 +30,18 @@ const SideNavigation = (props) => {
           onKeyPress={onSubmitHandler}
         />
         <ul className={classes.SideNavigationItems}>
-          <NavigationItem link='/'>Home</NavigationItem>
-          <NavigationItem link='/upload'>Upload</NavigationItem>
-          <NavigationItem link='/subs'>Subs</NavigationItem>
-          <NavigationItem link='/reports'>Reports</NavigationItem>
+          <NavigationItem link='/' pathsToMatch={['/', /^\/lien\/\d+/]}>
+            Home
+          </NavigationItem>
+          <NavigationItem link='/upload' pathsToMatch={['/upload']}>
+            Upload
+          </NavigationItem>
+          <NavigationItem link='/subs' pathsToMatch={['/subs']}>
+            Subs
+          </NavigationItem>
+          <NavigationItem link='/reports' pathsToMatch={['/reports']}>
+            Reports
+          </NavigationItem>
         </ul>
       </div>
       <div>

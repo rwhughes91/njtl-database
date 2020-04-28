@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import classes from './LienDetailEditForm.module.css';
 import formControls from './formControls';
 import useForm from '../../hooks/useForm/useForm';
 import Button from '../../components/UI/Button/Button';
+import * as actions from '../../store/actions/index';
 
-const LienDetailEditForm = ({ data }) => {
+const LienDetailEditForm = ({ data, lien_id }) => {
+  const dispatch = useDispatch();
+  const lastQuery = useRef(null);
   const formControlData = { formControls, data };
   const inputClassNames = {
     input: {
@@ -41,6 +45,10 @@ const LienDetailEditForm = ({ data }) => {
     updateField(event.target.value);
   };
 
+  const selectFieldChangedHandler = (event, { updateField }) => {
+    updateField(event.target.value, 0);
+  };
+
   const blurHandler = (event, { controlName, setFormData }) => {
     setFormData({ type: 'UPDATE_FIELD_TO_DISPLAY_VALUE', controlName });
   };
@@ -51,7 +59,7 @@ const LienDetailEditForm = ({ data }) => {
       blurHandler,
     },
     select: {
-      inputChangedHandler,
+      inputChangedHandler: selectFieldChangedHandler,
       blurHandler,
     },
     textarea: {
@@ -60,7 +68,7 @@ const LienDetailEditForm = ({ data }) => {
     },
   };
 
-  const [formElements, formData, setFormData] = useForm(
+  const [formElements, formData, setFormData, formFormatter] = useForm(
     formControlData,
     inputClassNames,
     callbacks
@@ -68,6 +76,49 @@ const LienDetailEditForm = ({ data }) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
+    const payload = {};
+    const payloadVariables = [
+      'recording_fee',
+      'recording_date',
+      'redemption_date',
+      'redemption_amount',
+      'winning_bid_percentage',
+      'search_fee',
+      'year_end_penalty',
+      'status',
+      'notes',
+    ];
+    const statusEnums = {
+      redeemed: 'REDEEMED',
+      bankruptcy: 'BANKRUPTCY',
+      'bankruptcy/redeemed': 'BANKRUPTCYREDEEMED',
+      foreclosure: 'FORECLOSURE',
+      'foreclosure/redeemed': 'FORECLOSUREREDEEMED',
+      'no-subs': 'NOSUBS',
+      own: 'OWN',
+      '': 'OPEN',
+    };
+    for (let variable of payloadVariables) {
+      if (formData.controls[variable].formatters) {
+        payload[variable] = formFormatter(
+          formData.controls[variable].value,
+          formData.controls[variable].formatters,
+          false
+        );
+      } else {
+        payload[variable] = formData.controls[variable].value;
+      }
+    }
+    payload.status = statusEnums[payload.status];
+    if (lastQuery.current !== JSON.stringify({ lien_id, payload })) {
+      lastQuery.current = JSON.stringify({ lien_id, payload });
+      dispatch(
+        actions.updateLien({
+          lien_id,
+          payload,
+        })
+      );
+    }
   };
 
   const clearHandler = (event) => {
@@ -114,9 +165,9 @@ const LienDetailEditForm = ({ data }) => {
           <div className={classes.Title}>
             <span>Financial Information</span>
           </div>
-          <div className={classes.FormColumn}>{formElements.slice(9, 13)}</div>
-          <div className={classes.FormColumn}>{formElements.slice(13, 17)}</div>
-          <div className={classes.FormColumn}>{formElements.slice(17, 21)}</div>
+          <div className={classes.FormColumn}>{formElements.slice(8, 12)}</div>
+          <div className={classes.FormColumn}>{formElements.slice(12, 16)}</div>
+          <div className={classes.FormColumn}>{formElements.slice(16, 20)}</div>
         </div>
       </div>
       <div className={classes.FormGroup}>

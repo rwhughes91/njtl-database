@@ -21,8 +21,35 @@ export const fetchLienFail = (error) => {
   };
 };
 
-export const clearLienError = () => {
+export const clearLien = () => {
   return {
-    type: actionTypes.CLEAR_LIEN_ERROR,
+    type: actionTypes.CLEAR_LIEN,
+  };
+};
+
+export const clearLienUpdate = () => {
+  return {
+    type: actionTypes.CLEAR_UPDATE_LIEN,
+  };
+};
+
+export const updateLien = (variables) => {
+  return {
+    type: actionTypes.UPDATE_LIEN,
+    variables,
+  };
+};
+
+export const updateLienSuccess = (lien) => {
+  return {
+    type: actionTypes.UPDATE_LIEN_SUCCESS,
+    lien,
+  };
+};
+
+export const updateLienFail = (error) => {
+  return {
+    type: actionTypes.UPDATE_LIEN_FAIL,
+    error,
   };
 };

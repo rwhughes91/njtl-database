@@ -28,3 +28,9 @@ export const fetchLiensFail = (error) => {
     error,
   };
 };
+
+export const clearLiens = () => {
+  return {
+    type: actionTypes.CLEAR_LIENS,
+  };
+};

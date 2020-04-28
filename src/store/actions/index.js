@@ -3,10 +3,15 @@ export {
   fetchLiensStart,
   fetchLiensSuccess,
   fetchLiensFail,
+  clearLiens,
 } from './lienSearch';
 export {
   fetchLien,
   fetchLienSuccess,
   fetchLienFail,
-  clearLienError,
+  clearLien,
+  clearLienUpdate,
+  updateLien,
+  updateLienSuccess,
+  updateLienFail,
 } from './lienDetail';

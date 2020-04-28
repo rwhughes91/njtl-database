@@ -55,6 +55,6 @@
   transform: scale(1);
 }
 
-.SideNavigationItem a.active {
+.Active {
   background-color: #464f56;
 }

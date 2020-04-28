@@ -18,9 +18,15 @@ const FlashMessage = (props) => {
   };
 
   const classNames = [classes.FlashMessage];
+  const buttonClassNames = [classes.Close];
   if (props.type === 'error') {
     classNames.push(classes.Error);
+    buttonClassNames.push(classes.CloseError);
+  } else if (props.type === 'success') {
+    classNames.push(classes.Success);
+    buttonClassNames.push(classes.CloseSuccess);
   }
+
   return (
     <CSSTransition
       in={showFlash}
@@ -37,7 +43,7 @@ const FlashMessage = (props) => {
       {() => (
         <div className={classNames.join(' ')} onClick={onClickHandler}>
           {props.message}
-          <button className={classes.Close}>&times;</button>
+          <button className={buttonClassNames.join(' ')}>&times;</button>
         </div>
       )}
     </CSSTransition>

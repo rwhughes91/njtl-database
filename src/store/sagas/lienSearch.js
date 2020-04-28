@@ -26,7 +26,7 @@ query FetchLiensCount($block: String, $lot: String, $qualifier: String, $certifi
 }`;
 
 export function* fetchLiensSaga(action) {
-  yield put(actions.fetchLiensStart());
+  yield put(actions.clearLiens());
   try {
     const countResponse = yield call(axios.post, '/graphql', {
       query: countQuery,

@@ -27,7 +27,6 @@ query fetchLien($lien_id: Int!) {
     flat_rate
     cert_int
     status
-    total_cash_out
     total_actual_interest
     subs {
       sub_type
@@ -39,7 +38,41 @@ query fetchLien($lien_id: Int!) {
 }
 `;
 
-const mutationQuery = ``;
+const mutationQuery = `
+mutation updateLien($lien_id: Int!, $payload: LienUpdateData!) {
+  updateLien(lien_id: $lien_id, payload: $payload) {
+    lien_id
+    block
+    lot
+    qualifier
+    county
+    certificate_number
+    address
+    sale_date
+    recording_fee
+    recording_date
+    redemption_date
+    redemption_amount
+    winning_bid_percentage
+    search_fee
+    year_end_penalty
+    tax_amount
+    premium
+    total_principal_balance
+    total_cash_out
+    flat_rate
+    cert_int
+    status
+    total_actual_interest
+    subs {
+      sub_type
+      sub_date
+      amount
+    }
+    notes
+  }
+}
+`;
 
 export function* fetchLienSaga(action) {
   try {
@@ -60,4 +93,16 @@ export function* fetchLienSaga(action) {
   }
 }
 
-export function* mutateLienSaga(action) {}
+export function* updateLienSaga(action) {
+  yield put(actions.clearLienUpdate());
+  try {
+    const response = yield call(axios.post, '/graphql', {
+      query: mutationQuery,
+      variables: action.variables,
+    });
+    const updatedLien = response.data.data.updateLien;
+    yield put(actions.updateLienSuccess(updatedLien));
+  } catch (err) {
+    yield put(actions.updateLienFail(err));
+  }
+}

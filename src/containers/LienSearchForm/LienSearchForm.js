@@ -7,7 +7,10 @@ import formControls from './formControls';
 
 import useForm from '../../hooks/useForm/useForm';
 
-const LienSearchForm = () => {
+const LienSearchForm = (props) => {
+  const dispatch = useDispatch();
+  const timer = useRef(0);
+  const lastQuery = useRef(null);
   const formControlData = { formControls };
   const inputClassNames = {
     input: {
@@ -25,9 +28,6 @@ const LienSearchForm = () => {
       errorMessage: classes.ErrorMessage,
     },
   };
-  const dispatch = useDispatch();
-  const timer = useRef(0);
-  const lastQuery = useRef(null);
 
   const validateInputTimer = useCallback((validatorFn) => {
     if (timer.current) {
@@ -87,12 +87,12 @@ const LienSearchForm = () => {
         variables[key] = formData.controls[key].value;
       }
       variables.sale_year = parseInt(variables.sale_year);
-      if (!(lastQuery.current === JSON.stringify(variables))) {
+      if (props.failed || lastQuery.current !== JSON.stringify(variables)) {
         lastQuery.current = JSON.stringify(variables);
         dispatch(actions.fetchLiens(variables));
       }
     },
-    [dispatch, formData.controls]
+    [dispatch, formData.controls, props.failed]
   );
 
   const form = (

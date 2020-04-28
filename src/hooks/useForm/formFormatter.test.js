@@ -1,40 +1,92 @@
+import each from 'jest-each';
 import formFormatter from './formFormatter';
 
-describe('formats date values to display date strings', () => {
-  it('formats db values to display strings', () => {
-    expect(formFormatter('1418860800000', ['date'])).toEqual('12/17/2014');
+const dateData = [
+  ['1418803200000', '12/17/2014'],
+  ['12', '12'],
+  ['1', '1'],
+  ['', ''],
+  ['12/17/2014', '12/17/2014'],
+  ['123', '12/31/1969'],
+  ['12/1', '12/1'],
+  ['12/', '12/'],
+];
+
+const percentData = [
+  ['4', '4%'],
+  [4, '4%'],
+  ['40%', '40%'],
+  ['0', '0%'],
+  ['', '0%'],
+];
+
+const percentData2 = [
+  ['4%', 4],
+  ['0%', 0],
+  ['4', '4'],
+  ['', ''],
+];
+
+const currencyData = [
+  [4, '$4.00'],
+  ['$4.00', '$4.00'],
+  ['4', '$4.00'],
+  ['4.00', '$4.00'],
+];
+
+const currencyData2 = [
+  ['$4.00', 4.0],
+  ['$4', 4.0],
+  ['4.00', '4.00'],
+  ['4', '4'],
+  [4, 4],
+];
+
+describe('formats date strings to display date strings', () => {
+  each(dateData).test('%s --> %s', (first, second) => {
+    expect(formFormatter(first, ['date'])).toEqual(second);
   });
-  it('formats string values to display strings', () => {
-    expect(formFormatter('12/17/2014', ['date'])).toEqual('12/17/2014');
+  it('raises error when a number is passed', () => {
+    expect(() => formFormatter(4, ['date'])).toThrow();
   });
-  it('formats invalid string values to display strings', () => {
-    expect(formFormatter('12/1', ['date'])).toEqual('12/1');
+  it('raises error when a boolean is passed', () => {
+    expect(() => formFormatter(true, ['date'])).toThrow();
+  });
+  it('raises error when a object is passed', () => {
+    expect(() => formFormatter({ test: true }, ['date'])).toThrow();
+  });
+});
+
+describe('formats display date strings to date strings', () => {
+  each(dateData.slice(0, 4)).test('%s <-- %s', (first, second) => {
+    expect(formFormatter(second, ['date'], false)).toEqual(first);
+  });
+  it('does not format timestamps', () => {
+    expect(formFormatter('1418803200000', ['date'], false)).toEqual(
+      '1418803200000'
+    );
   });
 });
 
 describe('formats percent values to display percent strings', () => {
-  it('formats string to display percent strings', () => {
-    expect(formFormatter('4', ['percent'])).toEqual('4%');
+  each(percentData).test('%s --> %s', (first, second) => {
+    expect(formFormatter(first, ['percent'])).toEqual(second);
   });
-  it('formats int to display percent strings', () => {
-    expect(formFormatter(4, ['percent'])).toEqual('400%');
-  });
-  it('formats percent string to display percent strings', () => {
-    expect(formFormatter('40%', ['percent'])).toEqual('40%');
-  });
-  it('formats percent string to display percent strings', () => {
-    expect(formFormatter('0', ['percent'])).toEqual('0%');
+});
+describe('formats display percent strings to percent values', () => {
+  each(percentData2).test('%s --> %s', (first, second) => {
+    expect(formFormatter(first, ['percent'], false)).toEqual(second);
   });
 });
 
 describe('formats values to display currency strings', () => {
-  it('formats int to display currency strings', () => {
-    expect(formFormatter(4, ['currency'])).toEqual('$4.00');
+  each(currencyData).test('%s --> %s', (first, second) => {
+    expect(formFormatter(first, ['currency'])).toEqual(second);
   });
-  it('formats currency string to display currency strings', () => {
-    expect(formFormatter('$4.00', ['currency'])).toEqual('$4.00');
-  });
-  it('formats invalid currency string to display currency strings', () => {
-    expect(formFormatter('4', ['currency'])).toEqual('$4.00');
+});
+
+describe('formats display currency strings to currency values', () => {
+  each(currencyData2).test('%s --> %s', (first, second) => {
+    expect(formFormatter(first, ['currency'], false)).toEqual(second);
   });
 });

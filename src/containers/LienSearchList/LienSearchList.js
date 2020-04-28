@@ -18,6 +18,7 @@ const LienSearchList = () => {
     (state) => state.lienSearch.lastQueryVariables
   );
   const lienError = useSelector((state) => state.lienDetail.error);
+  const currentLien = useSelector((state) => state.lienDetail.currentLien);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -32,8 +33,8 @@ const LienSearchList = () => {
   };
 
   const tableRowClickHandler = (id) => {
-    if (lienError) {
-      dispatch(actions.clearLienError());
+    if (lienError || currentLien) {
+      dispatch(actions.clearLien());
     }
     history.push(`/lien/${id}`);
   };

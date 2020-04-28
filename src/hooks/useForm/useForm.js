@@ -111,9 +111,9 @@ const useForm = (
   }, [data]);
 
   const inputChangedHandler = useCallback(
-    (value, controlName) => {
+    (value, controlName, fieldLength = 1) => {
       let updatedControls;
-      if (value.toString().length > 0) {
+      if (value.toString().length >= fieldLength) {
         const [valid] = formValidation(
           value,
           formData.controls[controlName].validation
@@ -126,9 +126,9 @@ const useForm = (
             value,
           },
         };
-        let formIsValid = false;
-        for (let inputIdentifier in updatedControls) {
-          formIsValid = updatedControls[inputIdentifier].valid || formIsValid;
+        let formIsValid = true;
+        for (let inputIdentifier in formData.controls) {
+          formIsValid = formData.controls[inputIdentifier].valid && formIsValid;
         }
         updatedControls.formIsValid = formIsValid;
       } else {
@@ -152,6 +152,7 @@ const useForm = (
 
   const validateInputHandler = useCallback(
     (value, controlName) => {
+      value = value.toString();
       if (value.length > 0) {
         const [valid, errorMessage] = formValidation(
           value,
@@ -164,9 +165,9 @@ const useForm = (
             errorMessage,
           },
         };
-        let formIsValid = false;
-        for (let inputIdentifier in updatedControls) {
-          formIsValid = updatedControls[inputIdentifier].valid || formIsValid;
+        let formIsValid = true;
+        for (let inputIdentifier in formData.controls) {
+          formIsValid = formData.controls[inputIdentifier].valid && formIsValid;
         }
         updatedControls.formIsValid = formIsValid;
         dispatch({
@@ -220,8 +221,8 @@ const useForm = (
               event,
               {
                 controlName: formElement.id,
-                updateField: (value) =>
-                  inputChangedHandler(value, formElement.id),
+                updateField: (value, fieldLength) =>
+                  inputChangedHandler(value, formElement.id, fieldLength),
                 validateField: validateInputHandler,
                 formData,
                 setFormData: dispatch,
@@ -243,7 +244,7 @@ const useForm = (
     };
     return <Input {...props} />;
   });
-  return [formElements, formData, dispatch];
+  return [formElements, formData, dispatch, formFormatter];
 };
 
 export default useForm;

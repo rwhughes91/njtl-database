@@ -26,7 +26,16 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        error: action.error,
+        error: {
+          error: action.error,
+          displayMessage: 'Could not query liens',
+        },
+      };
+    case actionTypes.CLEAR_LIENS:
+      return {
+        ...state,
+        liens: null,
+        error: null,
       };
     default:
       return state;
