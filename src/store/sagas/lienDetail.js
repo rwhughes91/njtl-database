@@ -31,7 +31,7 @@ query fetchLien($lien_id: Int!) {
     subs {
       sub_type
       sub_date
-      amount
+      total
     }
     notes
   }

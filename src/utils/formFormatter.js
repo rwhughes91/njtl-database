@@ -68,6 +68,18 @@ const currencyFormatter = (value, display) => {
   );
 };
 
+const titleCaseFormatter = (str) => {
+  if (typeof str !== 'string') {
+    return str;
+  }
+  str = str.toLowerCase().split(' ');
+  let newStr = [];
+  for (let word of str) {
+    newStr.push(word.charAt(0).toUpperCase() + word.slice(1));
+  }
+  return newStr.join(' ');
+};
+
 const formatter = (value, formatters, display = true) => {
   let newValue = value;
   for (let formatter of formatters) {
@@ -77,6 +89,8 @@ const formatter = (value, formatters, display = true) => {
       newValue = currencyFormatter(value, display);
     } else if (formatter === 'percent') {
       newValue = percentageFormatter(value, display);
+    } else if (formatter === 'titleCase') {
+      newValue = titleCaseFormatter(value);
     }
   }
   return newValue;

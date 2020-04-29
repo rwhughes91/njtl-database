@@ -1,7 +1,7 @@
 import React, { useReducer, useCallback, useMemo, useEffect } from 'react';
 import Input from '../../components/UI/Input/Input';
-import formFormatter from './formFormatter';
-import formValidation from './formValidation';
+import formFormatter from '../../utils/formFormatter';
+import formValidation from '../../utils/formValidation';
 
 const inputDefaultConfigs = {
   input: {},

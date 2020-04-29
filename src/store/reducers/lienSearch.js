@@ -34,7 +34,6 @@ export default (state = initialState, action) => {
     case actionTypes.CLEAR_LIENS:
       return {
         ...state,
-        liens: null,
         error: null,
       };
     default:

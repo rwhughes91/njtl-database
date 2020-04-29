@@ -5,6 +5,7 @@ import formControls from './formControls';
 import useForm from '../../hooks/useForm/useForm';
 import Button from '../../components/UI/Button/Button';
 import * as actions from '../../store/actions/index';
+import LienListView from '../../components/LienListView/LienListView';
 
 const LienDetailEditForm = ({ data, lien_id }) => {
   const dispatch = useDispatch();
@@ -126,31 +127,15 @@ const LienDetailEditForm = ({ data, lien_id }) => {
     setFormData({ type: 'RESET_FORM' });
   };
 
-  let subs;
-  if (data.subs && data.subs.length > 0) {
-    const subRows = data.subs.map((sub, index) => {
-      const tds = [];
-      for (let key in sub) {
-        tds.push(<td key={key}>{sub[key]}</td>);
-      }
-      return <tr key={index}>{tds}</tr>;
-    });
-    subs = (
-      <table className={classes.SubTable}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Type</th>
-            <th>Date</th>
-            <th>Amount</th>
-          </tr>
-        </thead>
-        <tbody>{subRows}</tbody>
-      </table>
-    );
-  } else {
-    subs = <div className={classes.NoSubTable}>No Subs</div>;
-  }
+  const props = {
+    headers: ['Type', 'Date', 'Total'],
+    data: data.subs ? data.subs : [],
+    emptyMessage: 'No Subs',
+    lien_id: data.lien_id ? data.lien_id : '',
+    styles: { tableLayout: 'fixed' },
+    emptyMessageStyles: { position: 'relative', top: '-2rem' },
+  };
+  let subs = <LienListView {...props} />;
   const form = (
     <form className={classes.LienDetailEditForm}>
       <div className={classes.FormGroup}>

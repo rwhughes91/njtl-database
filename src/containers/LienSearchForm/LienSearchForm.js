@@ -89,6 +89,7 @@ const LienSearchForm = (props) => {
       variables.sale_year = parseInt(variables.sale_year);
       if (props.failed || lastQuery.current !== JSON.stringify(variables)) {
         lastQuery.current = JSON.stringify(variables);
+        dispatch(actions.clearLien());
         dispatch(actions.fetchLiens(variables));
       }
     },
