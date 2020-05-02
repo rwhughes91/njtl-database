@@ -1,4 +1,5 @@
 import formValidation from './formValidation';
+import each from 'jest-each';
 
 describe('validates the form field is not empty', () => {
   it('validates the form field is not empty', () => {
@@ -36,5 +37,17 @@ describe('validates the form field has a maximum length', () => {
   });
   it('validates the form field has a max length', () => {
     expect(formValidation(' ', { maxLength: 5 })).toEqual([true, '']);
+  });
+});
+
+describe('validates the form field is a currency', () => {
+  it('returns an error message when the field is not a currency', () => {
+    expect(formValidation('randomData', { isCurrency: true })).toEqual([
+      false,
+      'Must be a currency',
+    ]);
+  });
+  it('returns true when a currency', () => {
+    expect(formValidation('$4,000', { isCurrency: true })).toEqual([true, '']);
   });
 });

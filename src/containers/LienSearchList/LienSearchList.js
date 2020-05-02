@@ -64,12 +64,32 @@ const LienSearchList = () => {
       'Address',
     ];
     const props = {
-      headers,
       data: liens,
-      tableRowClickHandler,
+      headers,
+      pagination,
       emptyMessage: 'No liens found',
     };
-    return <LienListView {...props}>{pagination}</LienListView>;
+    const tableRows = (formFormatter) => {
+      return liens.map((lien) => {
+        const tds = [];
+        for (let key in lien) {
+          if (typeof key === 'string' && key.includes('date')) {
+            tds.push(<td key={key}>{formFormatter(lien[key], ['date'])}</td>);
+          } else {
+            tds.push(<td key={key}>{lien[key]}</td>);
+          }
+        }
+        return (
+          <tr
+            key={lien.lien_id}
+            onClick={() => tableRowClickHandler(lien.lien_id)}
+          >
+            {tds}
+          </tr>
+        );
+      });
+    };
+    return <LienListView {...props}>{tableRows}</LienListView>;
   } else if (loading) {
     return <Spinner bgColor='white' />;
   } else {

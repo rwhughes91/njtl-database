@@ -2,10 +2,10 @@ import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import classes from './LienDetailEditForm.module.css';
 import formControls from './formControls';
-import useForm from '../../hooks/useForm/useForm';
-import Button from '../../components/UI/Button/Button';
-import * as actions from '../../store/actions/index';
-import LienListView from '../../components/LienListView/LienListView';
+import useForm from '../../../hooks/useForm/useForm';
+import Button from '../../../components/UI/Button/Button';
+import * as actions from '../../../store/actions/index';
+import LienListView from '../../../components/LienListView/LienListView';
 
 const LienDetailEditForm = ({ data, lien_id }) => {
   const dispatch = useDispatch();
@@ -128,14 +128,31 @@ const LienDetailEditForm = ({ data, lien_id }) => {
   };
 
   const props = {
-    headers: ['Type', 'Date', 'Total'],
     data: data.subs ? data.subs : [],
+    headers: ['Type', 'Date', 'Total'],
     emptyMessage: 'No Subs',
-    lien_id: data.lien_id ? data.lien_id : '',
-    styles: { tableLayout: 'fixed' },
-    emptyMessageStyles: { position: 'relative', top: '-2rem' },
+    styles: {
+      styles: { tableLayout: 'fixed' },
+      emptyMessageStyles: { position: 'relative', top: '-2rem' },
+    },
   };
-  let subs = <LienListView {...props} />;
+  const tableRows = (formFormatter) => {
+    const subs = data.subs;
+    return subs.map((sub, index) => {
+      const tds = [];
+      for (let key in sub) {
+        if (typeof key === 'string' && key.includes('date')) {
+          tds.push(<td key={key}>{formFormatter(sub[key], ['date'])}</td>);
+        } else if (key === 'total') {
+          tds.push(<td key={key}>{formFormatter(sub[key], ['currency'])}</td>);
+        } else {
+          tds.push(<td key={key}>{sub[key]}</td>);
+        }
+      }
+      return <tr key={index}>{tds}</tr>;
+    });
+  };
+  let subs = <LienListView {...props}>{tableRows}</LienListView>;
   const form = (
     <form className={classes.LienDetailEditForm}>
       <div className={classes.FormGroup}>

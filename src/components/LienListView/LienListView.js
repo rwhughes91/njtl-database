@@ -1,22 +1,20 @@
 import React from 'react';
 import classes from './LienListView.module.css';
-import FormFormatter from '../../utils/formFormatter';
+import formFormatter from '../../utils/formFormatter';
 
 const LienListView = ({
-  headers,
   data,
-  tableRowClickHandler,
+  headers,
+  pagination,
   emptyMessage,
-  lien_id,
+  styles = {},
   children,
-  styles,
-  emptyMessageStyles,
 }) => {
   let table;
   if (data && data.length >= 1) {
     table = (
       <div>
-        <table className={classes.Table} style={styles}>
+        <table className={classes.Table} style={styles.styles}>
           <thead>
             <tr>
               {headers.map((header) => (
@@ -24,44 +22,14 @@ const LienListView = ({
               ))}
             </tr>
           </thead>
-          <tbody>
-            {data.map((rowData, index) => {
-              const tds = [];
-              for (let key in rowData) {
-                if (typeof key === 'string' && key.includes('date')) {
-                  tds.push(
-                    <td key={key}>{FormFormatter(rowData[key], ['date'])}</td>
-                  );
-                } else if (key === 'total') {
-                  tds.push(
-                    <td key={key}>
-                      {FormFormatter(rowData[key], ['currency'])}
-                    </td>
-                  );
-                } else {
-                  tds.push(<td key={key}>{rowData[key]}</td>);
-                }
-              }
-              let onClickHandler = null;
-              if (tableRowClickHandler && lien_id) {
-                onClickHandler = () => tableRowClickHandler(lien_id);
-              } else if (tableRowClickHandler) {
-                onClickHandler = () => tableRowClickHandler(rowData.lien_id);
-              }
-              return (
-                <tr key={index} onClick={onClickHandler}>
-                  {tds}
-                </tr>
-              );
-            })}
-          </tbody>
+          <tbody>{children(formFormatter)}</tbody>
         </table>
-        {children}
+        {pagination}
       </div>
     );
   } else {
     table = (
-      <div className={classes.EmptyMessage} style={emptyMessageStyles}>
+      <div className={classes.EmptyMessage} style={styles.emptyMessageStyles}>
         {emptyMessage}
       </div>
     );

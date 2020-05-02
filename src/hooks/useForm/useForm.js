@@ -151,7 +151,7 @@ const useForm = (
   );
 
   const validateInputHandler = useCallback(
-    (value, controlName) => {
+    (value, controlName, errorMessageValidation = true) => {
       value = value.toString();
       if (value.length > 0) {
         const [valid, errorMessage] = formValidation(
@@ -162,7 +162,7 @@ const useForm = (
           controlName,
           data: {
             valid,
-            errorMessage,
+            errorMessage: errorMessageValidation ? errorMessage : '',
           },
         };
         let formIsValid = true;

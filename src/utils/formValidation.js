@@ -1,3 +1,5 @@
+import validator from 'validator';
+
 const formValidation = (value, rules) => {
   let isValid = true;
   let errorMessage = '';
@@ -17,6 +19,12 @@ const formValidation = (value, rules) => {
     isValid = value.length <= rules.maxLength && isValid;
     if (!isValid) {
       errorMessage = `Must be under ${rules.maxLength + 1} chars`;
+    }
+  }
+  if (rules.isCurrency) {
+    isValid = validator.isCurrency(value);
+    if (!isValid) {
+      errorMessage = 'Must be a currency';
     }
   }
   return [isValid, errorMessage];

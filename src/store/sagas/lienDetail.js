@@ -67,7 +67,7 @@ mutation updateLien($lien_id: Int!, $payload: LienUpdateData!) {
     subs {
       sub_type
       sub_date
-      amount
+      total
     }
     notes
   }

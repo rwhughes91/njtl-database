@@ -36,7 +36,7 @@ const SideNavigation = (props) => {
           <NavigationItem link='/upload' pathsToMatch={['/upload']}>
             Upload
           </NavigationItem>
-          <NavigationItem link='/subs' pathsToMatch={['/subs']}>
+          <NavigationItem link='/subs' pathsToMatch={['/subs', '/subs/batch']}>
             Subs
           </NavigationItem>
           <NavigationItem link='/reports' pathsToMatch={['/reports']}>
