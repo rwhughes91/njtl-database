@@ -114,7 +114,7 @@ const useForm = (
   }, [data]);
 
   const inputChangedHandler = useCallback(
-    (value, controlName, fieldLength = 1) => {
+    (value, controlName, fieldLength = 1, toDispatch = true) => {
       let updatedControls;
       if (value.toString().length >= fieldLength) {
         const [valid] = formValidation(
@@ -144,10 +144,14 @@ const useForm = (
           },
         };
       }
-      dispatch({
+      const payload = {
         type: 'UPDATE_FIELD',
         ...updatedControls,
-      });
+      };
+      if (toDispatch) {
+        return dispatch(payload);
+      }
+      return payload;
     },
     [formData]
   );
@@ -157,7 +161,8 @@ const useForm = (
       value,
       controlName,
       errorMessageValidation = true,
-      lengthToValidate = 1
+      lengthToValidate = 1,
+      toDispatch = true
     ) => {
       value = value.toString();
       if (value.length >= lengthToValidate) {
@@ -182,10 +187,14 @@ const useForm = (
           }
         }
         updatedControls.formIsValid = formIsValid;
-        dispatch({
+        const payload = {
           type: 'UPDATE_FIELD',
           ...updatedControls,
-        });
+        };
+        if (toDispatch) {
+          return dispatch(payload);
+        }
+        return payload;
       }
     },
     [formData]

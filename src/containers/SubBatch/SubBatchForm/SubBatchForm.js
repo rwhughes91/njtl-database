@@ -25,9 +25,8 @@ const SubBatchForm = (props) => {
       errorMessage: '',
     },
   };
-  const selectChangedHandler = (event, { updateField }) => {
+  const selectChangedHandler = (event) => {
     let value = event.target.value;
-    updateField(value);
     if (value) {
       props.fieldSelected(value);
     } else {
@@ -36,11 +35,28 @@ const SubBatchForm = (props) => {
   };
   const inputChangedHandler = (
     event,
-    { updateField, controlName, validateField }
+    { updateField, controlName, validateField, setFormData }
   ) => {
     let value = event.target.value;
+    let existingDate = false;
+    if (props.subBatchDates) {
+      for (let dateTime of props.subBatchDates) {
+        const date = new Date(parseInt(dateTime)).toLocaleDateString();
+        if (date === value) {
+          existingDate = true;
+          break;
+        }
+      }
+    }
     updateField(value);
-    validateField(value, controlName, true, 0);
+    const actionObject = validateField(value, controlName, true, 0, false);
+    const payload = { ...actionObject };
+    if (existingDate) {
+      payload.data.valid = false;
+      payload.data.errorMessage = 'Cannot be an already batched date';
+      payload.formIsValid = false;
+    }
+    setFormData(payload);
   };
   const callbacks = {
     select: {

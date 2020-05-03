@@ -63,6 +63,7 @@ const SubBatch = (props) => {
       fieldSelected={onFieldChangeHandler}
       clearBatchData={clearSubBatch}
       data={lastCounty.current}
+      subBatchDates={subBatchData.data}
     >
       {(formElements, button) => {
         return (
