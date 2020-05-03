@@ -43,9 +43,10 @@ const useForm = (
       switch (action.type) {
         case 'UPDATE_FIELD':
           const updatedControls = {
-            formIsValid: action.formIsValid
-              ? action.formIsValid
-              : state.formIsValid,
+            formIsValid:
+              typeof action.formIsValid === 'boolean'
+                ? action.formIsValid
+                : state.formIsValid,
             controls: {
               ...state.controls,
               [action.controlName]: {
@@ -56,7 +57,9 @@ const useForm = (
           };
           return updatedControls;
         case 'UPDATE_FIELD_TO_DISPLAY_VALUE':
-          let updatedField = state.controls[action.controlName].value;
+          let updatedField = action.value
+            ? action.value
+            : state.controls[action.controlName].value;
           if (state.controls[action.controlName].formatters) {
             updatedField = formFormatter(
               updatedField,
@@ -135,8 +138,7 @@ const useForm = (
         updatedControls = {
           controlName,
           data: {
-            touched: false,
-            valid: false,
+            valid: true,
             errorMessage: '',
             value,
           },
@@ -151,9 +153,14 @@ const useForm = (
   );
 
   const validateInputHandler = useCallback(
-    (value, controlName, errorMessageValidation = true) => {
+    (
+      value,
+      controlName,
+      errorMessageValidation = true,
+      lengthToValidate = 1
+    ) => {
       value = value.toString();
-      if (value.length > 0) {
+      if (value.length >= lengthToValidate) {
         const [valid, errorMessage] = formValidation(
           value,
           formData.controls[controlName].validation
@@ -167,7 +174,12 @@ const useForm = (
         };
         let formIsValid = true;
         for (let inputIdentifier in formData.controls) {
-          formIsValid = formData.controls[inputIdentifier].valid && formIsValid;
+          if (inputIdentifier === controlName) {
+            formIsValid = valid && formIsValid;
+          } else {
+            formIsValid =
+              formData.controls[inputIdentifier].valid && formIsValid;
+          }
         }
         updatedControls.formIsValid = formIsValid;
         dispatch({
@@ -196,9 +208,7 @@ const useForm = (
       touched: formElement.config.touched,
       label: formElement.config.elementConfig.placeholder,
       errorMessage: formElement.config.errorMessage,
-      invalid: formElement.config.errorMessage
-        ? formElement.config.errorMessage.length > 0
-        : false,
+      invalid: !formElement.config.valid,
       className: inputConfigs[formElement.config.elementType].className
         ? inputConfigs[formElement.config.elementType].className
         : '',

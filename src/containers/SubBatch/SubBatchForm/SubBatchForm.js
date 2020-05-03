@@ -1,20 +1,24 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import classes from './SubBatchForm.module.css';
 import useForm from '../../../hooks/useForm/useForm';
 import formControls from './formControls';
+import Button from '../../../components/UI/Button/Button';
 
 const SubBatchForm = (props) => {
-  const formControlData = { formControls };
+  const data = useMemo(() => {
+    return { county: props.data };
+  }, [props.data]);
+  const formControlData = { formControls, data };
   const inputClassNames = {
     input: {
-      className: '',
+      className: classes.InputElement,
       container: '',
       label: '',
-      invalid: '',
+      invalid: classes.Invalid,
       errorMessage: '',
     },
     select: {
-      className: '',
+      className: classes.InputElement,
       container: '',
       label: '',
       invalid: '',
@@ -23,12 +27,20 @@ const SubBatchForm = (props) => {
   };
   const selectChangedHandler = (event, { updateField }) => {
     let value = event.target.value;
-    props.fieldSelected(value);
     updateField(value);
+    if (value) {
+      props.fieldSelected(value);
+    } else {
+      props.clearBatchData();
+    }
   };
-  const inputChangedHandler = (event, { updateField }) => {
+  const inputChangedHandler = (
+    event,
+    { updateField, controlName, validateField }
+  ) => {
     let value = event.target.value;
     updateField(value);
+    validateField(value, controlName, true, 0);
   };
   const callbacks = {
     select: {
@@ -38,8 +50,21 @@ const SubBatchForm = (props) => {
       inputChangedHandler,
     },
   };
-  const [formElements] = useForm(formControlData, inputClassNames, callbacks);
-  const form = <form className={classes.SubBatchForm}>{formElements}</form>;
+  const [formElements, formData] = useForm(
+    formControlData,
+    inputClassNames,
+    callbacks
+  );
+  const button = (
+    <Button btnType='Primary' disabled={!formData.formIsValid}>
+      Create new batch
+    </Button>
+  );
+  const form = (
+    <form className={classes.SubBatchForm}>
+      {props.children(formElements, button)}
+    </form>
+  );
   return form;
 };
 

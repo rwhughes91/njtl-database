@@ -32,7 +32,7 @@ query fetchLiensFromSubDate($date: String!, $county: String!) {
 `;
 
 const SubBatch = (props) => {
-  const [subBatchData, sendRequestSubBatchData] = useAxios();
+  const [subBatchData, sendRequestSubBatchData, clearSubBatch] = useAxios();
   const [subListData, sendRequestSubListData] = useAxios();
   const history = useHistory();
   const lastCounty = useRef(null);
@@ -58,9 +58,27 @@ const SubBatch = (props) => {
     history.push('/subs/batch');
   };
 
-  const onSubListBlurHandler = () => {};
-
-  let form = <SubBatchForm fieldSelected={onFieldChangeHandler} />;
+  let form = (
+    <SubBatchForm
+      fieldSelected={onFieldChangeHandler}
+      clearBatchData={clearSubBatch}
+      data={lastCounty.current}
+    >
+      {(formElements, button) => {
+        return (
+          <>
+            {formElements[0]}
+            {subBatchData.data && (
+              <>
+                {formElements.slice(1)}
+                {button}
+              </>
+            )}
+          </>
+        );
+      }}
+    </SubBatchForm>
+  );
 
   return (
     <>

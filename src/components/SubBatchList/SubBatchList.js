@@ -16,7 +16,7 @@ const SubBatchList = ({
     const props = {
       headers: ['Township', 'Sub Date'],
       data,
-      emptyMessage: 'No sub batches',
+      emptyMessage: 'Please select a township...',
     };
     const tableRows = (formFormatter) => {
       return data.map((sub, index) => {

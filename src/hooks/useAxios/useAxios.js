@@ -7,6 +7,13 @@ const useAxios = () => {
     lastQueryName: null,
     error: false,
   });
+  const clearState = () => {
+    setRequestData({
+      data: null,
+      lastQueryName: null,
+      error: false,
+    });
+  };
   const runAxios = async (query, queryName, url = '/graphql') => {
     try {
       const response = await axios.post(url, query);
@@ -23,7 +30,7 @@ const useAxios = () => {
       });
     }
   };
-  return [requestData, runAxios];
+  return [requestData, runAxios, clearState];
 };
 
 export default useAxios;

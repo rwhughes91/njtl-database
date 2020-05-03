@@ -51,3 +51,15 @@ describe('validates the form field is a currency', () => {
     expect(formValidation('$4,000', { isCurrency: true })).toEqual([true, '']);
   });
 });
+
+describe('validates the form field is a date', () => {
+  it('returns an error message when the field is not a date', () => {
+    expect(formValidation('randomData', { isDate: true })).toEqual([
+      false,
+      'Must be a valid date',
+    ]);
+  });
+  it('returns true when a date', () => {
+    expect(formValidation('1/1/2020', { isDate: true })).toEqual([true, '']);
+  });
+});

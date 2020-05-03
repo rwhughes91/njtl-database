@@ -1,8 +1,19 @@
-import React, { useState, useMemo } from 'react';
-import formFormatter from '../../../utils/formFormatter';
+import React, { useMemo } from 'react';
+import classes from './SubListFormElement.module.css';
 import useForm from '../../../hooks/useForm/useForm';
+import useAxios from '../../../hooks/useAxios/useAxios';
 
-const SubListFormElement = ({ sub_type, sub_date, total }) => {
+const query = `
+mutation updateSub($lien_id: Int!, $sub_date: String!, $sub_type: String!, $amount: Float!) {
+  updateSubAmount(lien_id: $lien_id, sub_date: $sub_date, sub_type: $sub_type, amount: $amount) {
+    total
+  }
+}
+`;
+
+const SubListFormElement = ({ lien_id, sub_type, sub_date, total }) => {
+  const [, updateSubRequest] = useAxios();
+
   const data = useMemo(() => {
     return { total };
   }, [total]);
@@ -25,10 +36,10 @@ const SubListFormElement = ({ sub_type, sub_date, total }) => {
 
   const inputClassNames = {
     input: {
-      className: '',
+      className: classes.InputElement,
       container: '',
       label: '',
-      invalid: '',
+      invalid: classes.Invalid,
       errorMessage: '',
     },
   };
@@ -41,9 +52,31 @@ const SubListFormElement = ({ sub_type, sub_date, total }) => {
     validateField(event.target.value, controlName, false);
   };
 
-  const blurHandler = (event, { controlName, formData, setFormData }) => {
+  const blurHandler = (
+    event,
+    { controlName, formData, setFormData, formFormatter }
+  ) => {
     if (formData.controls.total.valid) {
-      setFormData({ type: 'UPDATE_FIELD_TO_DISPLAY_VALUE', controlName });
+      const value = formFormatter(event.target.value, ['currency'], false);
+      setFormData({
+        type: 'UPDATE_FIELD_TO_DISPLAY_VALUE',
+        controlName,
+        value: event.target.value,
+      });
+      if (value && value !== data.total && value > 0) {
+        updateSubRequest(
+          {
+            query,
+            variables: {
+              lien_id,
+              sub_date,
+              sub_type,
+              amount: value,
+            },
+          },
+          'updateSubAmount'
+        );
+      }
     } else {
       setFormData({
         type: 'UPDATE_FIELD',

@@ -37,6 +37,7 @@ const SubList = ({ subData, subBatchVisited }) => {
             for (let type of types) {
               const sub = lien.subs.find((sub) => sub.sub_type === type);
               const props = {
+                lien_id: lien.lien_id,
                 sub_type: type,
                 sub_date,
                 total: sub ? sub.total : 0,

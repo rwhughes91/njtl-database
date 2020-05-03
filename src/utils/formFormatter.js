@@ -5,6 +5,9 @@ const dateFormatter = (value, display) => {
       if (!(value.charAt(1) === '/' || value.charAt(2) === '/')) {
         return new Date(parseInt(value)).toLocaleDateString();
       }
+      if (value.charAt(0) === '0') {
+        return new Date(value).toLocaleDateString();
+      }
       return value;
     } else {
       if (value.includes('/')) {
@@ -49,16 +52,28 @@ const currencyFormatter = (value, display) => {
   if (typeof value === 'string' || typeof value === 'number') {
     if (display) {
       let newValue = value;
-      if (typeof value === 'string' && value.includes('$')) {
-        newValue = value.replace(/\$/, '');
+      if (typeof value === 'string') {
+        if (value.includes('$')) {
+          newValue = newValue.replace(/\$/, '');
+        }
+        if (value.includes(',')) {
+          newValue = newValue.replace(/,/, '');
+        }
       }
       return Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
       }).format(newValue);
     } else {
-      if (typeof value === 'string' && value.includes('$')) {
-        return parseFloat(value.slice(1));
+      let newValue = value;
+      if (typeof value === 'string') {
+        if (value.includes('$')) {
+          newValue = newValue.replace(/\$/, '');
+        }
+        if (value.includes(',')) {
+          newValue = newValue.replace(/,/, '');
+        }
+        return parseFloat(newValue);
       }
       return value;
     }

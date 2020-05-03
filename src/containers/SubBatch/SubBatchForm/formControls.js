@@ -1,17 +1,4 @@
 const formControls = {
-  sub_date: {
-    elementType: 'input',
-    elementConfig: {
-      type: 'text',
-      placeholder: 'Sub date',
-    },
-    value: '',
-    validation: {},
-    valid: true,
-    touched: false,
-    errorMessage: '',
-    formatters: ['date'],
-  },
   county: {
     elementType: 'select',
     elementConfig: {
@@ -78,12 +65,26 @@ const formControls = {
         { value: 'Woodbridge', displayValue: 'Woodbridge' },
         { value: 'Woodbury', displayValue: 'Woodbury' },
       ],
+      placeholder: 'Select Township',
     },
     value: 'Select...',
     validation: {},
     valid: true,
     touched: false,
     errorMessage: '',
+  },
+  sub_date: {
+    elementType: 'input',
+    elementConfig: {
+      type: 'text',
+      placeholder: 'Sub date',
+    },
+    value: '',
+    validation: { required: true, isDate: true, minLength: 8 },
+    valid: false,
+    touched: false,
+    errorMessage: '',
+    formatters: ['date'],
   },
 };
 
