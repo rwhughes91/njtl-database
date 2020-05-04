@@ -1,13 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import classes from './SubListFormElement.module.css';
 import useForm from '../../../hooks/useForm/useForm';
 import useAxios from '../../../hooks/useAxios/useAxios';
 
 const query = `
 mutation updateSub($lien_id: Int!, $sub_date: String!, $sub_type: String!, $amount: Float!) {
-  updateSubAmount(lien_id: $lien_id, sub_date: $sub_date, sub_type: $sub_type, amount: $amount) {
-    total
-  }
+  updateSubAmount(lien_id: $lien_id, sub_date: $sub_date, sub_type: $sub_type, amount: $amount)
 }
 `;
 
@@ -17,6 +15,8 @@ const SubListFormElement = ({ lien_id, sub_type, sub_date, total }) => {
   const data = useMemo(() => {
     return { total };
   }, [total]);
+
+  const lastValue = useRef(data.total);
 
   const formControls = {
     total: {
@@ -63,7 +63,7 @@ const SubListFormElement = ({ lien_id, sub_type, sub_date, total }) => {
         controlName,
         value: event.target.value,
       });
-      if (value && value !== data.total && value > 0) {
+      if (value !== lastValue.current && value >= 0) {
         updateSubRequest(
           {
             query,
@@ -76,6 +76,7 @@ const SubListFormElement = ({ lien_id, sub_type, sub_date, total }) => {
           },
           'updateSubAmount'
         );
+        lastValue.current = value;
       }
     } else {
       setFormData({

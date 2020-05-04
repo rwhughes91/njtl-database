@@ -66,18 +66,28 @@ const SubBatchForm = (props) => {
       inputChangedHandler,
     },
   };
-  const [formElements, formData] = useForm(
+  const [formElements, formData, , formFormatter] = useForm(
     formControlData,
     inputClassNames,
     callbacks
   );
+
+  const onSubmitHandler = (event) => {
+    event.preventDefault();
+    const { county, sub_date } = formData.controls;
+    props.submitted(
+      county.value,
+      formFormatter(sub_date.value, ['date'], false)
+    );
+  };
+
   const button = (
     <Button btnType='Primary' disabled={!formData.formIsValid}>
       Create new batch
     </Button>
   );
   const form = (
-    <form className={classes.SubBatchForm}>
+    <form className={classes.SubBatchForm} onSubmit={onSubmitHandler}>
       {props.children(formElements, button)}
     </form>
   );

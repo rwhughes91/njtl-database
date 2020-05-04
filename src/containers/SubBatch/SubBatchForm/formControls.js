@@ -80,7 +80,7 @@ const formControls = {
       placeholder: 'Sub date',
     },
     value: '',
-    validation: { required: true, isDate: true, minLength: 9 },
+    validation: { required: true, isDate: true, minLength: 8 },
     valid: false,
     touched: false,
     errorMessage: '',

@@ -31,12 +31,28 @@ query fetchLiensFromSubDate($date: String!, $county: String!) {
 }
 `;
 
-const SubBatch = (props) => {
+const openLiensQuery = `
+query fetchOpenLiens($county: String!) {
+  getOpenLiens(county: $county) {
+    lien_id
+    block
+    lot
+    qualifier
+    certificate_number
+    sale_date
+    county
+    address
+  }
+}
+`;
+
+const SubBatch = () => {
   const [subBatchData, sendRequestSubBatchData, clearSubBatch] = useAxios();
   const [subListData, sendRequestSubListData] = useAxios();
   const history = useHistory();
   const lastCounty = useRef(null);
   const subBatchVisited = useRef(false);
+  const subDate = useRef('');
 
   const onFieldChangeHandler = (value) => {
     lastCounty.current = value;
@@ -47,15 +63,29 @@ const SubBatch = (props) => {
     );
   };
 
-  const tableRowClickHandler = (date) => {
+  const updateSubListData = (query, variables, queryName, date) => {
     sendRequestSubListData(
       {
-        query: subDetailQuery,
-        variables: { county: lastCounty.current, date },
+        query,
+        variables,
       },
-      'getLiensFromSubDate'
+      queryName
     );
+    subDate.current = date;
     history.push('/subs/batch');
+  };
+
+  const tableRowClickHandler = (date) => {
+    updateSubListData(
+      subDetailQuery,
+      { county: lastCounty.current, date },
+      'getLiensFromSubDate',
+      date
+    );
+  };
+
+  const onNewBatchSubmitHandler = (county, date) => {
+    updateSubListData(openLiensQuery, { county }, 'getOpenLiens', date);
   };
 
   let form = (
@@ -64,6 +94,7 @@ const SubBatch = (props) => {
       clearBatchData={clearSubBatch}
       data={lastCounty.current}
       subBatchDates={subBatchData.data}
+      submitted={onNewBatchSubmitHandler}
     >
       {(formElements, button) => {
         return (
@@ -96,6 +127,7 @@ const SubBatch = (props) => {
           <SubList
             subBatchVisited={subBatchVisited.current}
             subData={subListData.data}
+            subDate={subDate.current}
           />
         </Route>
       </Switch>
