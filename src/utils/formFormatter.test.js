@@ -38,6 +38,7 @@ const currencyData = [
   ['$1,000.00', '$1,000.00'],
   ['$1,000', '$1,000.00'],
   ['1,000', '$1,000.00'],
+  ['', '$0.00'],
 ];
 
 const currencyData2 = [
@@ -47,6 +48,7 @@ const currencyData2 = [
   ['4', 4],
   [4, 4],
   ['$1,320.00', 1320.0],
+  ['', 0],
 ];
 
 describe('formats date strings to display date strings', () => {

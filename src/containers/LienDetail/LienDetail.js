@@ -4,7 +4,7 @@ import classes from './LienDetail.module.css';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import * as actions from '../../store/actions/index';
 import { useSelector, useDispatch } from 'react-redux';
-import LienDetailEditForm from '../LienDetailEditForm/LienDetailEditForm';
+import LienDetailEditForm from './LienDetailEditForm/LienDetailEditForm';
 import FlashMessage from '../../components/UI/FlashMessage/FlashMessage';
 
 const LienDetail = () => {

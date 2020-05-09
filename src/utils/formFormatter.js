@@ -73,6 +73,9 @@ const currencyFormatter = (value, display) => {
         if (value.includes(',')) {
           newValue = newValue.replace(/,/, '');
         }
+        if (value === '') {
+          newValue = 0;
+        }
         return parseFloat(newValue);
       }
       return value;

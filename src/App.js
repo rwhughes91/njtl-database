@@ -5,6 +5,8 @@ import Layout from './components/Layout/Layout';
 import LienSearch from './containers/LienSearch/LienSearch';
 import LienDetail from './containers/LienDetail/LienDetail';
 import SubBatch from './containers/SubBatch/SubBatch.js';
+import UploadLiens from './containers/UploadLiens/UploadLiens';
+import Reports from './containers/Reports/Reports';
 
 function App() {
   return (
@@ -17,6 +19,12 @@ function App() {
           </Route>
           <Route path='/subs'>
             <SubBatch />
+          </Route>
+          <Route path='/upload'>
+            <UploadLiens />
+          </Route>
+          <Route path='/reports'>
+            <Reports />
           </Route>
           <Route path='/'>
             <LienSearch />

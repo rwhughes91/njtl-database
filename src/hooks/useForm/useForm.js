@@ -131,7 +131,12 @@ const useForm = (
         };
         let formIsValid = true;
         for (let inputIdentifier in formData.controls) {
-          formIsValid = formData.controls[inputIdentifier].valid && formIsValid;
+          if (inputIdentifier === controlName) {
+            formIsValid = valid && formIsValid;
+          } else {
+            formIsValid =
+              formData.controls[inputIdentifier].valid && formIsValid;
+          }
         }
         updatedControls.formIsValid = formIsValid;
       } else {

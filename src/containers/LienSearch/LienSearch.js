@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import classes from './LienSearch.module.css';
-import LienSearchForm from '../LienSearchForm/LienSearchForm';
+import LienSearchForm from './LienSearchForm/LienSearchForm';
 import LienSearchList from '../LienSearchList/LienSearchList';
 import FlashMessage from '../../components/UI/FlashMessage/FlashMessage';
 

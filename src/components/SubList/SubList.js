@@ -5,6 +5,7 @@ import { Redirect } from 'react-router-dom';
 import SubListFormElement from '../../containers/SubBatch/SubListFormElement/SubListFormElement';
 
 const SubList = ({ subData, subBatchVisited, subDate }) => {
+  console.log('sub list render');
   if (!subBatchVisited) {
     return <Redirect to='/subs' />;
   }

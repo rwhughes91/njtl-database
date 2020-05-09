@@ -86,7 +86,7 @@ const SubListFormElement = ({ lien_id, sub_type, sub_date, total }) => {
           touched: false,
           valid: false,
           errorMessage: false,
-          value: formFormatter(data.total, ['currency']),
+          value: formFormatter(lastValue.current, ['currency']),
         },
       });
     }

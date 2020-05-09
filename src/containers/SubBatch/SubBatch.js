@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import SubBatchForm from './SubBatchForm/SubBatchForm';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import useAxios from '../../hooks/useAxios/useAxios';
 import SubBatchList from '../../components/SubBatchList/SubBatchList';
 import SubList from '../../components/SubList/SubList';
@@ -47,21 +47,27 @@ query fetchOpenLiens($county: String!) {
 `;
 
 const SubBatch = () => {
+  const [lastCounty, setLastCounty] = useState(null);
   const [subBatchData, sendRequestSubBatchData, clearSubBatch] = useAxios();
-  const [subListData, sendRequestSubListData] = useAxios();
+  const [subListData, sendRequestSubListData, clearSubList] = useAxios();
   const history = useHistory();
-  const lastCounty = useRef(null);
+  const location = useLocation();
   const subBatchVisited = useRef(false);
   const subDate = useRef('');
+  const toUpdate = useRef(false);
 
-  const onFieldChangeHandler = (value) => {
-    lastCounty.current = value;
-    subBatchVisited.current = true;
-    sendRequestSubBatchData(
-      { query: subBatchQuery, variables: { county: value } },
-      'getSubBatch'
-    );
-  };
+  console.log('sub batch render');
+
+  useEffect(() => {
+    console.log('use effect');
+    if (lastCounty && location.pathname === '/subs') {
+      sendRequestSubBatchData(
+        { query: subBatchQuery, variables: { county: lastCounty } },
+        'getSubBatch'
+      );
+      toUpdate.current = false;
+    }
+  }, [lastCounty, sendRequestSubBatchData, location.pathname]);
 
   const updateSubListData = (query, variables, queryName, date) => {
     sendRequestSubListData(
@@ -75,24 +81,32 @@ const SubBatch = () => {
     history.push('/subs/batch');
   };
 
+  const onFieldChangeHandler = (county) => {
+    setLastCounty(county);
+    subBatchVisited.current = true;
+  };
+
   const tableRowClickHandler = (date) => {
+    clearSubList();
     updateSubListData(
       subDetailQuery,
-      { county: lastCounty.current, date },
+      { county: lastCounty, date },
       'getLiensFromSubDate',
       date
     );
   };
 
   const onNewBatchSubmitHandler = (county, date) => {
+    clearSubList();
     updateSubListData(openLiensQuery, { county }, 'getOpenLiens', date);
+    toUpdate.current = true;
   };
 
   let form = (
     <SubBatchForm
       fieldSelected={onFieldChangeHandler}
       clearBatchData={clearSubBatch}
-      data={lastCounty.current}
+      data={lastCounty}
       subBatchDates={subBatchData.data}
       submitted={onNewBatchSubmitHandler}
     >
@@ -120,7 +134,7 @@ const SubBatch = () => {
             form={form}
             subBatchData={subBatchData.data}
             tableRowClickHandler={tableRowClickHandler}
-            lastCounty={lastCounty.current}
+            lastCounty={lastCounty}
           />
         </Route>
         <Route path='/subs/batch' exact>
