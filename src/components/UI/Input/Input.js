@@ -77,12 +77,14 @@ const Input = (props) => {
   );
 };
 
-export default React.memo(Input, (prevProps, nextProps) => {
-  const props = ['value', 'touched', 'invalid'];
-  for (let prop of props) {
-    if (!(prevProps[prop] === nextProps[prop])) {
-      return false;
-    }
-  }
-  return true;
-});
+// export default React.memo(Input, (prevProps, nextProps) => {
+//   const props = ['value', 'touched', 'invalid'];
+//   for (let prop of props) {
+//     if (!(prevProps[prop] === nextProps[prop])) {
+//       return false;
+//     }
+//   }
+//   return true;
+// });
+
+export default Input;

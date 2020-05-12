@@ -136,7 +136,7 @@ const UploadLiens = (props) => {
     setLiensUploading(uploadingBeginState);
     const data = new FormData();
     data.append('file', selectedFile);
-    Axios.post('http://localhost:4000/upload', data).catch((err) => {
+    Axios.put('http://localhost:4000/upload', data).catch((err) => {
       setLiensUploading({
         uploading: false,
         success: false,

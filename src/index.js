@@ -10,6 +10,7 @@ import createSagaMiddleware from 'redux-saga';
 
 import lienSearchReducer from './store/reducers/lienSearch';
 import lienDetailReducer from './store/reducers/lienDetail';
+import authReducer from './store/reducers/auth';
 import rootSaga from './store/sagas/index';
 
 import './index.css';
@@ -22,6 +23,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const rootReducer = combineReducers({
   lienSearch: lienSearchReducer,
   lienDetail: lienDetailReducer,
+  auth: authReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

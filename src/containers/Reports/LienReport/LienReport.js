@@ -23,9 +23,13 @@ const LienReport = (props) => {
     },
   };
 
-  const inputChangedHandler = (event, { updateField }) => {
+  const inputChangedHandler = (
+    event,
+    { controlName, updateField, validateField }
+  ) => {
     const value = event.target.value;
     updateField(value);
+    validateField(value, controlName, true, 0);
   };
 
   const callbacks = {
@@ -57,7 +61,9 @@ const LienReport = (props) => {
   return (
     <form onSubmit={submitHandler}>
       {formElements}
-      <Button btnType='Primary'>Submit</Button>
+      <Button btnType='Primary' disabled={!formData.formIsValid}>
+        Submit
+      </Button>
     </form>
   );
 };

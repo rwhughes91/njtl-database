@@ -56,10 +56,7 @@ const SubBatch = () => {
   const subDate = useRef('');
   const toUpdate = useRef(false);
 
-  console.log('sub batch render');
-
   useEffect(() => {
-    console.log('use effect');
     if (lastCounty && location.pathname === '/subs') {
       sendRequestSubBatchData(
         { query: subBatchQuery, variables: { county: lastCounty } },
