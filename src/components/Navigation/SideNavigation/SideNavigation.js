@@ -1,23 +1,9 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import * as actions from '../../../store/actions/index';
 import classes from './SideNavigation.module.css';
 import NavigationItem from '../NavigationItems/NavigationItem/NavigationItem';
 // import DrawerToggler from './DrawerToggler/DrawerToggler';
 
 const SideNavigation = (props) => {
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const onSubmitHandler = (event) => {
-    if (event.key === 'Enter') {
-      dispatch(actions.clearLien());
-      dispatch(actions.clearLiens());
-      history.push(`/lien/${event.target.value}`);
-      event.target.value = '';
-      event.target.blur();
-    }
-  };
   return (
     <div className={classes.SideNavigation}>
       <div>
@@ -27,7 +13,7 @@ const SideNavigation = (props) => {
         <input
           className={classes.SideNavigationInput}
           placeholder='Search by Lien ID...'
-          onKeyPress={onSubmitHandler}
+          onKeyPress={props.submitted}
         />
         <ul className={classes.SideNavigationItems}>
           <NavigationItem link='/' pathsToMatch={['/', /^\/lien\/\d+/]}>
@@ -53,4 +39,4 @@ const SideNavigation = (props) => {
   );
 };
 
-export default SideNavigation;
+export default React.memo(SideNavigation);

@@ -28,10 +28,15 @@ query FetchLiensCount($block: String, $lot: String, $qualifier: String, $certifi
 export function* fetchLiensSaga(action) {
   yield put(actions.clearLiens());
   try {
-    const countResponse = yield call(axios.post, '/graphql', {
-      query: countQuery,
-      variables: action.variables,
-    });
+    const countResponse = yield call(
+      axios.post,
+      '/graphql',
+      {
+        query: countQuery,
+        variables: action.variables,
+      },
+      { headers: { Authorization: `Bearer ${action.token}` } }
+    );
     const count = countResponse.data.data.getLiens.count;
     let variables;
     const maxCount = parseInt(process.env.REACT_APP_MAX_COUNT);
@@ -42,10 +47,15 @@ export function* fetchLiensSaga(action) {
         ...action.variables,
       };
     }
-    const response = yield call(axios.post, '/graphql', {
-      query,
-      variables,
-    });
+    const response = yield call(
+      axios.post,
+      '/graphql',
+      {
+        query,
+        variables,
+      },
+      { headers: { Authorization: `Bearer ${action.token}` } }
+    );
     yield put(
       actions.fetchLiensSuccess(
         response.data.data.getLiens.liens,

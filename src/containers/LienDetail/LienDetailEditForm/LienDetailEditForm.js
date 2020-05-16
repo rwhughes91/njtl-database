@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import classes from './LienDetailEditForm.module.css';
 import formControls from './formControls';
 import useForm from '../../../hooks/useForm/useForm';
@@ -9,6 +9,7 @@ import LienListView from '../../../components/LienListView/LienListView';
 
 const LienDetailEditForm = ({ data, lien_id }) => {
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token);
   const lastQuery = useRef(null);
   const formControlData = { formControls, data };
   const inputClassNames = {
@@ -69,7 +70,7 @@ const LienDetailEditForm = ({ data, lien_id }) => {
     },
   };
 
-  const [formElements, formData, setFormData, formFormatter] = useForm(
+  const { formElements, formData, setFormData, formFormatter } = useForm(
     formControlData,
     inputClassNames,
     callbacks
@@ -114,10 +115,13 @@ const LienDetailEditForm = ({ data, lien_id }) => {
     if (lastQuery.current !== JSON.stringify({ lien_id, payload })) {
       lastQuery.current = JSON.stringify({ lien_id, payload });
       dispatch(
-        actions.updateLien({
-          lien_id,
-          payload,
-        })
+        actions.updateLien(
+          {
+            lien_id,
+            payload,
+          },
+          token
+        )
       );
     }
   };

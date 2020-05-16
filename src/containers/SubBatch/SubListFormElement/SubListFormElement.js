@@ -99,7 +99,7 @@ const SubListFormElement = ({ lien_id, sub_type, sub_date, total }) => {
     },
   };
 
-  const [formElements] = useForm(
+  const { formElements } = useForm(
     { formControls, data },
     inputClassNames,
     callbacks

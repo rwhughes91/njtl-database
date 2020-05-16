@@ -1,8 +1,9 @@
 import { useState, useCallback } from 'react';
-import axios from '../../axios-liens';
 import Axios from 'axios';
+import useAxiosInstance from './useAxiosInstance';
 
 const useAxios = () => {
+  const axiosInstance = useAxiosInstance();
   const [requestData, setRequestData] = useState({
     data: null,
     lastQueryName: null,
@@ -18,10 +19,10 @@ const useAxios = () => {
     });
   }, []);
   const runAxios = useCallback(
-    async (query, queryName, cancelToken = {}, url = '/graphql') => {
+    async (query, queryName, config = {}, url = '/graphql') => {
       const { variables } = query;
       try {
-        const response = await axios.post(url, query, cancelToken);
+        const response = await axiosInstance.post(url, query, config);
         setRequestData({
           data: response.data.data[queryName],
           lastQueryName: queryName,
@@ -39,7 +40,7 @@ const useAxios = () => {
         }
       }
     },
-    []
+    [axiosInstance]
   );
   return [requestData, runAxios, clearState];
 };

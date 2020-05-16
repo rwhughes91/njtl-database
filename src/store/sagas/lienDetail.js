@@ -81,10 +81,15 @@ export function* fetchLienSaga(action) {
       (lien) => lien.lien_id === action.variables.lien_id
     );
     if (!lien) {
-      const response = yield call(axios.post, '/graphql', {
-        query,
-        variables: action.variables,
-      });
+      const response = yield call(
+        axios.post,
+        '/graphql',
+        {
+          query,
+          variables: action.variables,
+        },
+        { headers: { Authorization: `Bearer ${action.token}` } }
+      );
       lien = response.data.data.getLien;
     }
     yield put(actions.fetchLienSuccess(lien));
@@ -96,10 +101,15 @@ export function* fetchLienSaga(action) {
 export function* updateLienSaga(action) {
   yield put(actions.clearLienUpdate());
   try {
-    const response = yield call(axios.post, '/graphql', {
-      query: mutationQuery,
-      variables: action.variables,
-    });
+    const response = yield call(
+      axios.post,
+      '/graphql',
+      {
+        query: mutationQuery,
+        variables: action.variables,
+      },
+      { headers: { Authorization: `Bearer ${action.token}` } }
+    );
     const updatedLien = response.data.data.updateLien;
     yield put(actions.updateLienSuccess(updatedLien));
   } catch (err) {

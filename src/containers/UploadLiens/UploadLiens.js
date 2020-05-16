@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import ExportExcel from '../../components/ExportExcel/ExportExcel';
 import useAxios from '../../hooks/useAxios/useAxios';
 import Axios from 'axios';
@@ -69,6 +70,7 @@ query fetchUploadTemplate {
 `;
 
 const UploadLiens = (props) => {
+  const token = useSelector((state) => state.auth.token);
   const [fileName] = useState('uploadLiensTemplate');
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadData, requestUploadData] = useAxios();
@@ -136,7 +138,9 @@ const UploadLiens = (props) => {
     setLiensUploading(uploadingBeginState);
     const data = new FormData();
     data.append('file', selectedFile);
-    Axios.put('http://localhost:4000/upload', data).catch((err) => {
+    Axios.put('http://localhost:4000/upload', data, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).catch((err) => {
       setLiensUploading({
         uploading: false,
         success: false,
@@ -151,10 +155,9 @@ const UploadLiens = (props) => {
 
   const onErrorLogClickHandler = (event) => {
     setErrorLogMessage(null);
-    Axios({
-      url: 'http://localhost:4000/upload',
-      method: 'GET',
+    Axios.get('http://localhost:4000/upload', {
       responseType: 'blob',
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
         if (res.headers['content-type'].startsWith('application/json')) {

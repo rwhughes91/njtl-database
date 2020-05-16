@@ -1,6 +1,6 @@
 .SideNavigation {
   height: 100%;
-  width: 10%;
+  width: 20%;
   background-color: #32373d;
   position: fixed;
   top: 0;
@@ -11,12 +11,6 @@
   flex-flow: column;
   justify-content: space-between;
   text-align: center;
-}
-
-@media (max-width: 769px) {
-  .SideNavigation {
-    display: none;
-  }
 }
 
 .SideNavigationTitle {
@@ -41,7 +35,7 @@
   outline: none;
   box-shadow: none;
   border-radius: 10px;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   text-align: center;
   transition: transform 0.2s;
 }
@@ -66,4 +60,25 @@
   margin-bottom: 1rem;
   display: block;
   text-decoration: none;
+}
+
+@media (max-width: 769px) {
+  .SideNavigation {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .SideNavigation {
+    width: 20rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .SideNavigation {
+    width: 22rem;
+  }
+  .SideNavigationInput {
+    font-size: 1.3rem;
+  }
 }

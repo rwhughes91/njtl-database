@@ -5,21 +5,34 @@
   justify-content: space-between;
   position: fixed;
   top: 0;
-  left: 10%;
-  width: 90%;
+  right: 0;
+  width: 80%;
+  max-width: 250rem;
   height: 7rem;
   z-index: 100;
-}
-
-@media (max-width: 769px) {
-  .Navigation {
-    left: 0%;
-    width: 100%;
-  }
 }
 
 .Breadcrumb {
   font-size: 2.5rem;
   color: #707070;
   padding: 0.3rem 1rem;
+}
+
+@media (max-width: 769px) {
+  .Navigation {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .Navigation {
+    left: 20rem;
+    width: calc(100vw - 20rem);
+  }
+}
+@media (min-width: 1280px) {
+  .Navigation {
+    left: 22rem;
+    width: calc(100vw - 22rem);
+  }
 }

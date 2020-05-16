@@ -36,4 +36,4 @@ const NavigationItem = (props) => {
   );
 };
 
-export default NavigationItem;
+export default React.memo(NavigationItem);

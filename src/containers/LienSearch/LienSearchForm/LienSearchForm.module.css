@@ -68,3 +68,24 @@
 .ErrorMessage:empty {
   opacity: 0;
 }
+
+/* @media (max-width: 640px) {
+  .FormGroup {
+    flex-flow: column;
+    margin-top: 0;
+    width: 100%;
+  }
+  .ButtonGroup {
+    display: flex;
+    flex-flow: column;
+    margin-top: 1rem;
+    width: 95%;
+    margin: 1rem auto;
+  }
+  .Input {
+    font-size: 1rem;
+  }
+  .Label {
+    font-size: 1rem;
+  }
+} */

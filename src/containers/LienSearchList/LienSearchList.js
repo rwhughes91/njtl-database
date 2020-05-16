@@ -20,6 +20,7 @@ const LienSearchList = () => {
   );
   const lienError = useSelector((state) => state.lienDetail.error);
   const currentLien = useSelector((state) => state.lienDetail.currentLien);
+  const token = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -30,7 +31,7 @@ const LienSearchList = () => {
       ...lastQueryVariables,
       skip,
     };
-    dispatch(actions.fetchLiens(variables));
+    dispatch(actions.fetchLiens(variables, token));
   };
 
   const tableRowClickHandler = (id) => {

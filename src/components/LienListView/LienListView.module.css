@@ -2,6 +2,7 @@
   width: 100%;
   text-align: center;
   border-collapse: collapse;
+  overflow: hidden;
 }
 
 .Table th {
@@ -35,4 +36,20 @@
   margin: auto;
   text-align: center;
   color: #32373d;
+}
+
+@media (max-width: 769px) {
+  .EmptyMessage {
+    position: relative;
+    top: -1rem !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .Table th {
+    font-size: 1rem;
+  }
+  .Table td {
+    font-size: 0.9rem;
+  }
 }

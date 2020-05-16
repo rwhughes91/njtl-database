@@ -40,7 +40,7 @@ const MonthlyReport = (props) => {
       inputChangedHandler,
     },
   };
-  const [formElements, formData] = useForm(
+  const { formElements, formData } = useForm(
     formControlData,
     inputClassNames,
     callbacks

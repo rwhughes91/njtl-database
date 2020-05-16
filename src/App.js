@@ -11,23 +11,38 @@ import Reports from './containers/Reports/Reports';
 import Auth from './containers/Auth/Auth';
 import * as actions from './store/actions/index';
 import Logout from './containers/Auth/Logout/Logout';
+import FlashMessage, {
+  FlashMessageContainer,
+} from './components/UI/FlashMessage/FlashMessage';
 
 function App() {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.token);
+  const justLoggedIn = useSelector((state) => state.auth.justLoggedIn);
   useEffect(() => {
     dispatch(actions.authCheckState());
   }, [dispatch]);
-  let routes = (
+
+  let pages = (
     <Switch>
-      <Route path='/' exact>
+      <Route path='/'>
         <Auth />
       </Route>
       <Redirect to='/' />
     </Switch>
   );
   if (token) {
-    routes = (
+    let flashMessage = null;
+    if (justLoggedIn) {
+      flashMessage = <FlashMessage type='success' message={justLoggedIn} />;
+    }
+    const flashContainer = (
+      <FlashMessageContainer top='7rem'>
+        <FlashMessage type='info' message='Logged In' />
+        {flashMessage}
+      </FlashMessageContainer>
+    );
+    const desktopPages = (
       <Switch>
         <Route path='/lien/:lien_id' exact>
           <LienDetail />
@@ -49,13 +64,31 @@ function App() {
         </Route>
       </Switch>
     );
+    const mobilePages = (
+      <Switch>
+        <Route path='/lien/:lien_id' exact>
+          <LienDetail />
+        </Route>
+        <Route path='/logout'>
+          <Logout />
+        </Route>
+        <Route path='/'>
+          <LienSearch />
+        </Route>
+      </Switch>
+    );
+    pages = (
+      <>
+        <Navigation />
+        <Layout
+          flashContainer={flashContainer}
+          desktopPages={desktopPages}
+          mobilePages={mobilePages}
+        />
+      </>
+    );
   }
-  return (
-    <>
-      <Navigation />
-      <Layout>{routes}</Layout>
-    </>
-  );
+  return pages;
 }
 
 export default App;

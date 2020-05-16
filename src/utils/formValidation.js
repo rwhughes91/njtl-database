@@ -96,6 +96,20 @@ const formValidation = (value, rules) => {
       return [isValid, errorMessage];
     }
   }
+  if (rules.equal) {
+    isValid = value === rules.equal[0] && isValid;
+    if (!isValid) {
+      errorMessage = rules.equal[1];
+      return [isValid, errorMessage];
+    }
+  }
+  if (rules.isEmail) {
+    isValid = validator.isEmail(value) && isValid;
+    if (!isValid) {
+      errorMessage = `Must be a valid email`;
+      return [isValid, errorMessage];
+    }
+  }
   return [isValid, errorMessage];
 };
 

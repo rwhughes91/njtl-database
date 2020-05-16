@@ -36,6 +36,8 @@ export default (state = initialState, action) => {
         ...state,
         error: null,
       };
+    case actionTypes.CLEAR_LIENS_DATA:
+      return initialState;
     default:
       return state;
   }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import Button from '../../components/UI/Button/Button';
 import Modal from '../../components/UI/Modal/Modal';
 import LienReport from './LienReport/LienReport';
@@ -24,12 +25,21 @@ const exportToExcel = (excelData, fileName) => {
 
 const Reports = (props) => {
   const [showModal, setShowModal] = useState({ show: false, child: null });
-
+  const token = useSelector((state) => state.auth.token);
   const getTownships = async () => {
     try {
-      const response = await axios.post('/graphql', {
-        query: queries.getTownshipsList,
-      });
+      const response = await axios.post(
+        '/graphql',
+        {
+          query: queries.getTownshipsList,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const townships = response.data.data.getTownships;
       const excelData = townships.map((township) => {
         return { townships: township };
@@ -42,10 +52,19 @@ const Reports = (props) => {
 
   const getLienReport = async (variables) => {
     try {
-      const response = await axios.post('/graphql', {
-        query: queries.fetchLiens,
-        variables,
-      });
+      const response = await axios.post(
+        '/graphql',
+        {
+          query: queries.fetchLiens,
+          variables,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const excelData = response.data.data.getLiens.liens;
       exportToExcel(excelData, 'exportedLiens');
     } catch (err) {
@@ -59,10 +78,19 @@ const Reports = (props) => {
         ? 'fetchMonthlyRedemptions'
         : 'fetchMonthlySubPayments';
     try {
-      const response = await axios.post('/graphql', {
-        query: queries[queryId],
-        variables,
-      });
+      const response = await axios.post(
+        '/graphql',
+        {
+          query: queries[queryId],
+          variables,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const excelData = response.data.data[queryName];
       exportToExcel(excelData, title);
     } catch (err) {

@@ -1,9 +1,10 @@
 import * as actionTypes from './actionTypes';
 
-export const fetchLiens = (variables) => {
+export const fetchLiens = (variables, token) => {
   return {
     type: actionTypes.FETCH_LIENS,
     variables,
+    token,
   };
 };
 
@@ -32,5 +33,11 @@ export const fetchLiensFail = (error) => {
 export const clearLiens = () => {
   return {
     type: actionTypes.CLEAR_LIENS,
+  };
+};
+
+export const clearLiensData = () => {
+  return {
+    type: actionTypes.CLEAR_LIENS_DATA,
   };
 };

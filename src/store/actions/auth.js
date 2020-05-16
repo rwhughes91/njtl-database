@@ -61,3 +61,17 @@ export const authCheckState = () => {
     type: actionTypes.AUTH_CHECK_INITIAL_STATE,
   };
 };
+
+export const justLoggedIn = (message) => {
+  return {
+    type: actionTypes.JUST_LOGGED_IN,
+    message,
+  };
+};
+
+export const tokenMessage = (message) => {
+  return {
+    type: actionTypes.TOKEN_MESSAGE,
+    message,
+  };
+};

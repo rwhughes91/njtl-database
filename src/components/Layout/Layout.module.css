@@ -1,13 +1,27 @@
 .Main {
   position: absolute;
-  left: 10%;
+  left: 20%;
   top: 7rem;
-  width: 90%;
+  width: 80%;
 }
 
 @media (max-width: 769px) {
   .Main {
     left: 0;
     width: 100%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .Main {
+    left: 20rem;
+    width: calc(100vw - 20rem);
+  }
+}
+
+@media (min-width: 1280px) {
+  .Main {
+    left: 22rem;
+    width: calc(100vw - 22rem);
   }
 }

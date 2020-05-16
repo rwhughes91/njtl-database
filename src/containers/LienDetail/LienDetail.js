@@ -21,14 +21,15 @@ const LienDetail = () => {
   const updateSuccessMessage = useSelector(
     (state) => state.lienDetail.updateSuccessMessage
   );
+  const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
     if (currentLien && currentLien.lien_id !== variables.lien_id) {
-      dispatch(actions.fetchLien(variables));
+      dispatch(actions.fetchLien(variables, token));
     } else if (!currentLien) {
-      dispatch(actions.fetchLien(variables));
+      dispatch(actions.fetchLien(variables, token));
     }
-  }, [variables, currentLien, dispatch]);
+  }, [variables, currentLien, dispatch, token]);
   let successMessage;
   if (updateSuccessMessage) {
     successMessage = (

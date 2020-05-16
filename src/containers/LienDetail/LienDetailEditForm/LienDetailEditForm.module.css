@@ -161,3 +161,40 @@
   display: flex;
   margin: 0 0 0.5rem 0.5rem;
 }
+
+@media (max-width: 1200px) {
+  .Label {
+    font-size: 1.1rem;
+  }
+  .InputElement {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 1050px) {
+  .FormGroup {
+    flex-flow: column;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .FormType {
+    width: 80%;
+    margin: 1rem auto;
+  }
+}
+
+@media (max-width: 515px) {
+  .Label {
+    font-size: 1rem;
+  }
+  .InputElement {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 425px) {
+  .FormType {
+    width: 100%;
+  }
+}

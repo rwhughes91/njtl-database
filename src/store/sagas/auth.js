@@ -35,9 +35,16 @@ export function* authUserSaga(action) {
     yield call([localStorage, 'setItem'], 'expirationDate', expirationDate);
     yield call([localStorage, 'setItem'], 'userId', res.data.userId);
     yield put(actions.authSuccess(res.data.token, res.data.userId));
+    yield put(
+      actions.justLoggedIn(action.isSignUp ? 'Signed Up' : 'Logged In')
+    );
     yield put(actions.checkAuthTimeout(res.data.expiresIn));
   } catch (err) {
-    yield put(actions.authFail(err.response.data.error));
+    let errorMessage = err.response.data.message;
+    if (err.response.data.data) {
+      errorMessage = err.response.data.data[0].msg;
+    }
+    yield put(actions.authFail(errorMessage));
   }
 }
 

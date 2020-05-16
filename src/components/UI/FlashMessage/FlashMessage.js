@@ -2,6 +2,21 @@ import React, { useState, useEffect } from 'react';
 import classes from './FlashMessage.module.css';
 import { CSSTransition } from 'react-transition-group';
 
+export const FlashMessageContainer = (props) => {
+  let style = { top: props.top, right: props.right, width: props.width };
+  if (props.center) {
+    style = {
+      right: '50%',
+      transform: 'translateX(50%)',
+    };
+  }
+  return (
+    <div className={classes.FlashMessageContainer} style={style}>
+      {props.children}
+    </div>
+  );
+};
+
 const FlashMessage = (props) => {
   const [showFlash, setShowFlash] = useState(false);
   useEffect(() => {
@@ -25,6 +40,9 @@ const FlashMessage = (props) => {
   } else if (props.type === 'success') {
     classNames.push(classes.Success);
     buttonClassNames.push(classes.CloseSuccess);
+  } else if (props.type === 'info') {
+    classNames.push(classes.Info);
+    buttonClassNames.push(classes.InfoClose);
   }
 
   return (
@@ -42,8 +60,7 @@ const FlashMessage = (props) => {
     >
       {() => (
         <div className={classNames.join(' ')} onClick={onClickHandler}>
-          {props.message}
-          <button className={buttonClassNames.join(' ')}>&times;</button>
+          <p>{props.message}</p>
         </div>
       )}
     </CSSTransition>

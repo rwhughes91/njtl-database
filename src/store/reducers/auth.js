@@ -4,8 +4,9 @@ const initialState = {
   token: null,
   userId: null,
   error: null,
-  loading: false,
+  justLoggedIn: null,
   authRedirectPath: '/',
+  tokenMessage: null,
 };
 
 export default (state = initialState, action) => {
@@ -14,7 +15,6 @@ export default (state = initialState, action) => {
       return {
         ...state,
         error: null,
-        loading: true,
       };
     case actionTypes.AUTH_SUCCESS:
       return {
@@ -22,24 +22,33 @@ export default (state = initialState, action) => {
         token: action.token,
         userId: action.userId,
         error: null,
-        loading: false,
       };
     case actionTypes.AUTH_FAIL:
       return {
         ...state,
         error: action.error,
-        loading: false,
       };
     case actionTypes.AUTH_LOGOUT:
       return {
         ...state,
         token: null,
         userId: null,
+        justLoggedIn: null,
       };
     case actionTypes.SET_AUTH_REDIRECT_PATH:
       return {
         ...state,
         authRedirectPath: action.path,
+      };
+    case actionTypes.JUST_LOGGED_IN:
+      return {
+        ...state,
+        justLoggedIn: action.message,
+      };
+    case actionTypes.TOKEN_MESSAGE:
+      return {
+        ...state,
+        tokenMessage: action.message,
       };
     default:
       return state;

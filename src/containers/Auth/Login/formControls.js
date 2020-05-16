@@ -6,7 +6,7 @@ export default {
       placeholder: 'Email',
     },
     value: '',
-    validation: { required: true },
+    validation: { required: true, isEmail: true },
     valid: false,
     touched: false,
     errorMessage: '',

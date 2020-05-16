@@ -39,7 +39,7 @@ const formControls = {
     elementType: 'input',
     elementConfig: {
       type: 'text',
-      placeholder: 'Certificate Number',
+      placeholder: 'Certificate #',
     },
     value: '',
     validation: {},

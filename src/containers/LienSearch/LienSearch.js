@@ -1,13 +1,30 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import classes from './LienSearch.module.css';
+import * as actions from '../../store/actions/index';
 import LienSearchForm from './LienSearchForm/LienSearchForm';
 import LienSearchList from '../LienSearchList/LienSearchList';
 import FlashMessage from '../../components/UI/FlashMessage/FlashMessage';
+import withSizes from 'react-sizes';
+import MobileLienSearchFrom from './MobileLienSearchForm/MobileLienSearchForm';
 
-const LienSearch = () => {
+const LienSearch = ({ isMobile }) => {
+  const dispatch = useDispatch();
   const lienDetailError = useSelector((state) => state.lienDetail.error);
   const lienSearchError = useSelector((state) => state.lienSearch.error);
+
+  useEffect(() => {
+    if (lienDetailError) {
+      const timer = setTimeout(() => {
+        dispatch(actions.clearLien());
+      }, 6500);
+      return () => {
+        clearTimeout(timer);
+        dispatch(actions.clearLien());
+      };
+    }
+  }, [dispatch, lienDetailError]);
+
   let error = null;
   if (lienDetailError) {
     error = (
@@ -20,10 +37,9 @@ const LienSearch = () => {
       <FlashMessage type='error' message={lienSearchError.displayMessage} />
     );
   }
-  return (
+
+  const desktopForm = (
     <>
-      {error}
-      {listError}
       <div className={classes.LienSearch}>
         <LienSearchForm failed={lienSearchError ? true : false} />
       </div>
@@ -32,6 +48,24 @@ const LienSearch = () => {
       </div>
     </>
   );
+  const mobileForm = (
+    <div className={classes.LienSearch}>
+      <MobileLienSearchFrom />
+    </div>
+  );
+  return (
+    <>
+      {error}
+      {listError}
+      {isMobile ? mobileForm : desktopForm}
+    </>
+  );
 };
 
-export default React.memo(LienSearch);
+const mapSizesToProps = ({ width }) => {
+  return {
+    isMobile: width <= 630,
+  };
+};
+
+export default withSizes(mapSizesToProps)(React.memo(LienSearch));

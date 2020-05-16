@@ -41,6 +41,11 @@ const useForm = (
   const formReducer = useCallback(
     (state, action) => {
       switch (action.type) {
+        case 'UPDATE_FORM_VALIDITY':
+          return {
+            ...state,
+            formIsValid: action.formIsValid,
+          };
         case 'UPDATE_FIELD':
           const updatedControls = {
             formIsValid:
@@ -113,6 +118,21 @@ const useForm = (
     }
   }, [data]);
 
+  const isFormValid = useCallback(
+    (controlName = null, valid = null) => {
+      let formIsValid = true;
+      for (let inputIdentifier in formData.controls) {
+        if (controlName && valid !== null && inputIdentifier === controlName) {
+          formIsValid = valid && formIsValid;
+        } else {
+          formIsValid = formData.controls[inputIdentifier].valid && formIsValid;
+        }
+      }
+      return formIsValid;
+    },
+    [formData]
+  );
+
   const inputChangedHandler = useCallback(
     (value, controlName, fieldLength = 1, toDispatch = true) => {
       let updatedControls;
@@ -129,15 +149,16 @@ const useForm = (
             value,
           },
         };
-        let formIsValid = true;
-        for (let inputIdentifier in formData.controls) {
-          if (inputIdentifier === controlName) {
-            formIsValid = valid && formIsValid;
-          } else {
-            formIsValid =
-              formData.controls[inputIdentifier].valid && formIsValid;
-          }
-        }
+        // let formIsValid = true;
+        // for (let inputIdentifier in formData.controls) {
+        //   if (inputIdentifier === controlName) {
+        //     formIsValid = valid && formIsValid;
+        //   } else {
+        //     formIsValid =
+        //       formData.controls[inputIdentifier].valid && formIsValid;
+        //   }
+        // }
+        const formIsValid = isFormValid(controlName, valid);
         updatedControls.formIsValid = formIsValid;
       } else {
         updatedControls = {
@@ -158,7 +179,7 @@ const useForm = (
       }
       return payload;
     },
-    [formData]
+    [formData, isFormValid]
   );
 
   const validateInputHandler = useCallback(
@@ -182,15 +203,16 @@ const useForm = (
             errorMessage: errorMessageValidation ? errorMessage : '',
           },
         };
-        let formIsValid = true;
-        for (let inputIdentifier in formData.controls) {
-          if (inputIdentifier === controlName) {
-            formIsValid = valid && formIsValid;
-          } else {
-            formIsValid =
-              formData.controls[inputIdentifier].valid && formIsValid;
-          }
-        }
+        // let formIsValid = true;
+        // for (let inputIdentifier in formData.controls) {
+        //   if (inputIdentifier === controlName) {
+        //     formIsValid = valid && formIsValid;
+        //   } else {
+        //     formIsValid =
+        //       formData.controls[inputIdentifier].valid && formIsValid;
+        //   }
+        // }
+        const formIsValid = isFormValid(controlName, valid);
         updatedControls.formIsValid = formIsValid;
         const payload = {
           type: 'UPDATE_FIELD',
@@ -202,7 +224,7 @@ const useForm = (
         return payload;
       }
     },
-    [formData]
+    [formData, isFormValid]
   );
 
   const formElementsArray = [];
@@ -268,7 +290,13 @@ const useForm = (
     };
     return <Input {...props} />;
   });
-  return [formElements, formData, dispatch, formFormatter];
+  return {
+    formElements,
+    formData,
+    setFormData: dispatch,
+    formFormatter,
+    isFormValid,
+  };
 };
 
 export default useForm;

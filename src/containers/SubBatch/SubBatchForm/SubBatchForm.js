@@ -66,7 +66,7 @@ const SubBatchForm = (props) => {
       inputChangedHandler,
     },
   };
-  const [formElements, formData, , formFormatter] = useForm(
+  const { formElements, formData, formFormatter } = useForm(
     formControlData,
     inputClassNames,
     callbacks

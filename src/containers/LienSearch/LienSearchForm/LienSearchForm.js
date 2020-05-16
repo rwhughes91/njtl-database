@@ -1,14 +1,14 @@
 import React, { useCallback, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import classes from './LienSearchForm.module.css';
 import * as actions from '../../../store/actions/index';
 import Button from '../../../components/UI/Button/Button';
 import formControls from './formControls';
-
 import useForm from '../../../hooks/useForm/useForm';
 
 const LienSearchForm = (props) => {
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token);
   const timer = useRef(0);
   const lastQuery = useRef(null);
   const formControlData = { formControls };
@@ -36,19 +36,19 @@ const LienSearchForm = (props) => {
     timer.current = setTimeout(validatorFn, 1000);
   }, []);
 
-  const inputChangedHandler = (
-    event,
-    { controlName, updateField, validateField }
-  ) => {
-    let value = event.target.value;
-    if (controlName === 'sale_year') {
-      value = parseInt(value);
-    }
-    updateField(value);
-    validateInputTimer(() => {
-      validateField(value, controlName);
-    });
-  };
+  const inputChangedHandler = useCallback(
+    (event, { controlName, updateField, validateField }) => {
+      let value = event.target.value;
+      if (controlName === 'sale_year') {
+        value = parseInt(value);
+      }
+      updateField(value);
+      validateInputTimer(() => {
+        validateField(value, controlName);
+      });
+    },
+    [validateInputTimer]
+  );
 
   const callbacks = {
     input: {
@@ -59,7 +59,7 @@ const LienSearchForm = (props) => {
     },
   };
 
-  const [formElements, formData, setFormData] = useForm(
+  const { formElements, formData, setFormData } = useForm(
     formControlData,
     inputClassNames,
     callbacks
@@ -90,10 +90,10 @@ const LienSearchForm = (props) => {
       if (props.failed || lastQuery.current !== JSON.stringify(variables)) {
         lastQuery.current = JSON.stringify(variables);
         dispatch(actions.clearLien());
-        dispatch(actions.fetchLiens(variables));
+        dispatch(actions.fetchLiens(variables, token));
       }
     },
-    [dispatch, formData.controls, props.failed]
+    [dispatch, formData.controls, props.failed, token]
   );
 
   const form = (

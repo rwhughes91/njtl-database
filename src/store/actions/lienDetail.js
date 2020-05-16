@@ -1,9 +1,10 @@
 import * as actionTypes from './actionTypes';
 
-export const fetchLien = (variables) => {
+export const fetchLien = (variables, token) => {
   return {
     type: actionTypes.FETCH_LIEN,
     variables,
+    token,
   };
 };
 
@@ -33,10 +34,11 @@ export const clearLienUpdate = () => {
   };
 };
 
-export const updateLien = (variables) => {
+export const updateLien = (variables, token) => {
   return {
     type: actionTypes.UPDATE_LIEN,
     variables,
+    token,
   };
 };
 
