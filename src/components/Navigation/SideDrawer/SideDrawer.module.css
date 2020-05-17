@@ -1,0 +1,25 @@
+.SideDrawer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 18rem;
+  height: 100%;
+  z-index: 900;
+  box-sizing: border-box;
+  transition: transform 0.3s ease-out;
+  background-color: #32373d;
+}
+
+@media (min-width: 769px) {
+  .Toggler {
+    display: none;
+  }
+}
+
+.Open {
+  transform: translateX(0);
+}
+
+.Close {
+  transform: translateX(-100%);
+}

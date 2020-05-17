@@ -1,11 +1,15 @@
 import React from 'react';
 import classes from './SideNavigation.module.css';
 import NavigationItem from '../NavigationItems/NavigationItem/NavigationItem';
-// import DrawerToggler from './DrawerToggler/DrawerToggler';
 
 const SideNavigation = (props) => {
   return (
-    <div className={classes.SideNavigation}>
+    <div
+      className={[
+        classes.SideNavigation,
+        props.forceShow ? classes.Show : null,
+      ].join(' ')}
+    >
       <div>
         <p className={classes.SideNavigationTitle}>
           NJ Tax Lien <span>Database</span>

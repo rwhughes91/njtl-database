@@ -20,6 +20,16 @@
 
 @media (max-width: 769px) {
   .Navigation {
+    width: 92%;
+    height: 5rem;
+  }
+  .Breadcrumb {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .Navigation {
     width: 100%;
   }
 }

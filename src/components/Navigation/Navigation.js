@@ -1,15 +1,18 @@
-import React, { useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import classes from './Navigation.module.css';
 import NavigationItems from '../Navigation/NavigationItems/NavigationItems';
 import SideNavigation from '../Navigation/SideNavigation/SideNavigation';
 import * as actions from '../../store/actions/index';
+import DrawerToggler from '../Navigation/SideNavigation/DrawerToggler/DrawerToggler';
+import SideDrawer from '../Navigation/SideDrawer/SideDrawer';
 
 const Navigation = () => {
   const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
+  const [showSideDrawer, setShowSideDrawer] = useState(false);
 
   let page = 'Home';
   switch (location.pathname) {
@@ -34,6 +37,10 @@ const Navigation = () => {
     page = 'Subs';
   }
 
+  const toggleSideNav = useCallback(() => {
+    setShowSideDrawer((prevState) => !prevState);
+  }, []);
+
   const onSubmitHandler = useCallback(
     (event) => {
       if (event.key === 'Enter') {
@@ -50,6 +57,13 @@ const Navigation = () => {
   return (
     <>
       <SideNavigation submitted={onSubmitHandler} />
+      <DrawerToggler showSideDrawer={toggleSideNav}>Menu</DrawerToggler>
+      <SideDrawer
+        show={showSideDrawer}
+        showSideDrawer={toggleSideNav}
+        submitted={onSubmitHandler}
+        setShowSideDrawer={setShowSideDrawer}
+      />
       <div className={classes.Navigation}>
         <p className={classes.Breadcrumb}>{page}</p>
         <NavigationItems />
