@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import classes from './UploadLiens.module.css';
 import { useSelector } from 'react-redux';
 import ExportExcel from '../../components/ExportExcel/ExportExcel';
 import useAxios from '../../hooks/useAxios/useAxios';
@@ -7,7 +8,9 @@ import UploadLiensTable from '../../components/UploadLiensTable/UploadLiensTable
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Button from '../../components/UI/Button/Button';
 import socket from '../../socket';
-import FlashMessage from '../../components/UI/FlashMessage/FlashMessage';
+import FlashMessage, {
+  FlashMessageContainer,
+} from '../../components/UI/FlashMessage/FlashMessage';
 import * as FileSaver from 'file-saver';
 
 const getUploadTemplateQuery = `
@@ -69,10 +72,12 @@ query fetchUploadTemplate {
 }
 `;
 
-const UploadLiens = (props) => {
+const UploadLiens = () => {
   const token = useSelector((state) => state.auth.token);
   const [fileName] = useState('uploadLiensTemplate');
   const [selectedFile, setSelectedFile] = useState(null);
+  const [showUpload, setShowUpload] = useState(true);
+  const [showTable, setShowTable] = useState(false);
   const [uploadData, requestUploadData] = useAxios();
   const [errorLogMessage, setErrorLogMessage] = useState(null);
   const uploadStartState = useMemo(() => {
@@ -133,27 +138,30 @@ const UploadLiens = (props) => {
     };
   }, [requestUploadData]);
 
-  const onSubmitHandler = (event) => {
-    event.preventDefault();
-    setLiensUploading(uploadingBeginState);
-    const data = new FormData();
-    data.append('file', selectedFile);
-    Axios.put('http://localhost:4000/upload', data, {
-      headers: { Authorization: `Bearer ${token}` },
-    }).catch((err) => {
-      setLiensUploading({
-        uploading: false,
-        success: false,
-        errorMessage: err.response.data.message,
+  const onSubmitHandler = useCallback(
+    (event, uploadingBeginState, selectedFile, token) => {
+      event.preventDefault();
+      setLiensUploading(uploadingBeginState);
+      const data = new FormData();
+      data.append('file', selectedFile);
+      Axios.put('http://localhost:4000/upload', data, {
+        headers: { Authorization: `Bearer ${token}` },
+      }).catch((err) => {
+        setLiensUploading({
+          uploading: false,
+          success: false,
+          errorMessage: err.response.data.message,
+        });
       });
-    });
-  };
+    },
+    []
+  );
 
-  const onChangedHandler = (event) => {
+  const onChangedHandler = useCallback((event) => {
     setSelectedFile(event.target.files[0]);
-  };
+  }, []);
 
-  const onErrorLogClickHandler = (event) => {
+  const onErrorLogClickHandler = useCallback((token) => {
     setErrorLogMessage(null);
     Axios.get('http://localhost:4000/upload', {
       responseType: 'blob',
@@ -170,58 +178,132 @@ const UploadLiens = (props) => {
       .catch(() => {
         setErrorLogMessage('Something went wrong');
       });
-  };
+  }, []);
 
   let form = (
-    <form onSubmit={onSubmitHandler}>
-      <label>Upload your file</label>
-      <input type='file' onChange={onChangedHandler} />
-      <Button btnType='Primary'>Upload</Button>
-    </form>
+    <>
+      <form
+        className={classes.UploadForm}
+        onSubmit={(event) =>
+          onSubmitHandler(event, uploadingBeginState, selectedFile, token)
+        }
+      >
+        <h1 className={classes.FormTitle}>Upload new liens</h1>
+        <input
+          id='upload'
+          type='file'
+          onChange={onChangedHandler}
+          className={classes.UploadInput}
+        />
+        <label htmlFor='upload' className={classes.UploadInputLabel}>
+          <span
+            className={[
+              classes.UploadInputButton,
+              selectedFile ? classes.Active : null,
+            ].join(' ')}
+          >
+            Upload...
+          </span>
+          <span className={classes.UploadInputFile}>
+            {selectedFile ? selectedFile.name : 'No file selected'}
+          </span>
+        </label>
+
+        <Button btnType='Primary' disabled={!selectedFile}>
+          Upload
+        </Button>
+      </form>
+      <button
+        className={classes.SeeColumns}
+        onClick={() => setShowTable((prevState) => !prevState)}
+      >
+        {showTable ? 'Hide columns' : 'See columns'}
+      </button>
+    </>
   );
 
-  let flashMessage = null;
+  const flashMessagesArray = [];
+
+  let flashMessage;
   if (!liensUploading.uploading) {
     if (liensUploading.success) {
-      flashMessage = <FlashMessage type='success' message='Liens uploaded' />;
+      flashMessage = { type: 'success', message: 'Liens uploaded' };
+      flashMessagesArray.push(flashMessage);
     } else if (liensUploading.errorMessage) {
-      flashMessage = (
-        <FlashMessage type='error' message={liensUploading.errorMessage} />
-      );
+      flashMessage = { type: 'error', message: liensUploading.errorMessage };
+      flashMessagesArray.push(flashMessage);
     }
   }
 
-  let errorLogFlashMessage = null;
+  let errorLogFlashMessage;
   if (errorLogMessage) {
-    errorLogFlashMessage = (
-      <FlashMessage type='error' message={errorLogMessage} />
-    );
+    errorLogFlashMessage = { type: 'error', message: errorLogMessage };
+    flashMessagesArray.push(errorLogFlashMessage);
   }
 
   let uploadOutput = <Spinner />;
   if (uploadData.data && !liensUploading.uploading) {
-    uploadOutput = (
-      <>
-        {flashMessage}
-        {errorLogFlashMessage}
+    const downloads = (
+      <div className={classes.UploadForm}>
+        <h1 className={classes.FormTitle}>
+          Download a template / last error log
+        </h1>
         <ExportExcel excelData={uploadData.data.data} fileName={fileName}>
-          Export
+          Export template
         </ExportExcel>
-        <UploadLiensTable fields={uploadData.data.fields} />
-        {form}
-        <Button btnType='Secondary' clicked={onErrorLogClickHandler}>
+        <Button
+          btnType='Secondary'
+          clicked={() => onErrorLogClickHandler(token)}
+        >
           Error Log
         </Button>
+      </div>
+    );
+    uploadOutput = (
+      <>
+        <FlashMessageContainer top='7rem'>
+          {flashMessagesArray.map((flashMessage, index) => {
+            return <FlashMessage {...flashMessage} key={index} />;
+          })}
+        </FlashMessageContainer>
+        <div
+          className={[
+            classes.UploadLiens,
+            showTable ? classes.Shift : null,
+          ].join(' ')}
+        >
+          <ul className={classes.ButtonList}>
+            <li className={showUpload ? classes.Active : null}>
+              <button
+                className={classes.LoadButton}
+                onClick={() => setShowUpload(true)}
+              >
+                Upload
+              </button>
+            </li>
+            <li className={!showUpload ? classes.Active : null}>
+              <button
+                className={classes.LoadButton}
+                onClick={() => setShowUpload(false)}
+              >
+                Downloads
+              </button>
+            </li>
+          </ul>
+          {showUpload ? form : downloads}
+        </div>
+        <div
+          className={[classes.ColumnsTableContainer, classes.Shift].join(' ')}
+          style={showTable ? { opacity: '1' } : { opacity: '0' }}
+        >
+          <h1 className={classes.FormTitle}>Expected columns</h1>
+          <UploadLiensTable fields={uploadData.data.fields} />
+        </div>
       </>
     );
   }
 
-  return (
-    <div>
-      <h1>Upload Liens</h1>
-      {uploadOutput}
-    </div>
-  );
+  return uploadOutput;
 };
 
-export default UploadLiens;
+export default React.memo(UploadLiens);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import Button from '../../components/UI/Button/Button';
 import Modal from '../../components/UI/Modal/Modal';
@@ -8,6 +8,7 @@ import queries from './reportQueries';
 import axios from '../../axios-liens';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
+import classes from './Reports.module.css';
 
 const exportToExcel = (excelData, fileName) => {
   const fileType =
@@ -23,7 +24,7 @@ const exportToExcel = (excelData, fileName) => {
   FileSaver.saveAs(data, fileName + fileExtension);
 };
 
-const Reports = (props) => {
+const Reports = () => {
   const [showModal, setShowModal] = useState({ show: false, child: null });
   const token = useSelector((state) => state.auth.token);
   const getTownships = async () => {
@@ -50,53 +51,59 @@ const Reports = (props) => {
     }
   };
 
-  const getLienReport = async (variables) => {
-    try {
-      const response = await axios.post(
-        '/graphql',
-        {
-          query: queries.fetchLiens,
-          variables,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+  const getLienReport = useCallback(
+    async (variables) => {
+      try {
+        const response = await axios.post(
+          '/graphql',
+          {
+            query: queries.fetchLiens,
+            variables,
           },
-        }
-      );
-      const excelData = response.data.data.getLiens.liens;
-      exportToExcel(excelData, 'exportedLiens');
-    } catch (err) {
-      console.log(err);
-    }
-  };
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const excelData = response.data.data.getLiens.liens;
+        exportToExcel(excelData, 'exportedLiens');
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    [token]
+  );
 
-  const getMonthlyReport = async (queryName, variables, title) => {
-    const queryId =
-      queryName === 'getMonthlyRedemptions'
-        ? 'fetchMonthlyRedemptions'
-        : 'fetchMonthlySubPayments';
-    try {
-      const response = await axios.post(
-        '/graphql',
-        {
-          query: queries[queryId],
-          variables,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+  const getMonthlyReport = useCallback(
+    async (queryName, variables, title) => {
+      const queryId =
+        queryName === 'getMonthlyRedemptions'
+          ? 'fetchMonthlyRedemptions'
+          : 'fetchMonthlySubPayments';
+      try {
+        const response = await axios.post(
+          '/graphql',
+          {
+            query: queries[queryId],
+            variables,
           },
-        }
-      );
-      const excelData = response.data.data[queryName];
-      exportToExcel(excelData, title);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const excelData = response.data.data[queryName];
+        exportToExcel(excelData, title);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    [token]
+  );
 
   let children = null;
   switch (showModal.child) {
@@ -144,30 +151,61 @@ const Reports = (props) => {
     'Export Monthly Redemptions',
     'Export Monthly Subs',
   ];
+  const descriptions = [
+    'Export lien data by county, llc, or sale year',
+    'Export a list of townships',
+    'Export redemptions (optionally by county) that occurred during a particular month and year',
+    'Export subs paid (optionally by county) during a particular month and year',
+  ];
   const buttons = childTypes.map((type, i) => {
     if (type === 'Export Townships') {
       return (
-        <Button key={i} btnType='Primary' clicked={getTownships}>
-          Export Townships
-        </Button>
+        <tr key={i}>
+          <td>
+            <Button
+              style={{ width: '80%' }}
+              btnType='Primary'
+              clicked={getTownships}
+            >
+              Export Townships
+            </Button>
+          </td>
+          <td>{descriptions[i]}</td>
+        </tr>
       );
     }
     return (
-      <Button
-        key={i}
-        btnType='Primary'
-        clicked={() => setShowModal({ show: true, child: type })}
-      >
-        {type}
-      </Button>
+      <tr key={i}>
+        <td>
+          <Button
+            key={i}
+            style={{ width: '80%' }}
+            btnType='Primary'
+            clicked={() => setShowModal({ show: true, child: type })}
+          >
+            {type}
+          </Button>
+        </td>
+        <td>{descriptions[i]}</td>
+      </tr>
     );
   });
   return (
     <>
       {modal}
-      {buttons}
+      <div className={classes.Reports}>
+        <h1 className={classes.Title}>Download reports</h1>
+        <table>
+          <thead>
+            <tr>
+              <th>Exports</th>
+            </tr>
+          </thead>
+          <tbody>{buttons}</tbody>
+        </table>
+      </div>
     </>
   );
 };
 
-export default Reports;
+export default React.memo(Reports);

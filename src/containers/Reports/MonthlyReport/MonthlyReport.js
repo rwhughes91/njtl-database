@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import classes from './MonthlyReport.module.css';
 import useForm from '../../../hooks/useForm/useForm';
 import formControls from './monthlyFormControls';
@@ -23,14 +23,14 @@ const MonthlyReport = (props) => {
     },
   };
 
-  const inputChangedHandler = (
-    event,
-    { controlName, updateField, validateField }
-  ) => {
-    const value = event.target.value;
-    updateField(value);
-    validateField(value, controlName);
-  };
+  const inputChangedHandler = useCallback(
+    (event, { controlName, updateField, validateField }) => {
+      const value = event.target.value;
+      updateField(value);
+      validateField(value, controlName);
+    },
+    []
+  );
 
   const callbacks = {
     input: {
@@ -65,7 +65,12 @@ const MonthlyReport = (props) => {
   };
 
   return (
-    <form onSubmit={submitHandler}>
+    <form onSubmit={submitHandler} className={classes.MonthlyReportForm}>
+      <h1 className={classes.FormTitle}>
+        {props.name === 'getMonthlyRedemptions'
+          ? 'Export Monthly Redemptions'
+          : 'Export Monthly Subs'}
+      </h1>
       {formElements}
       <Button btnType='Primary' disabled={!formData.formIsValid}>
         Submit
@@ -74,4 +79,4 @@ const MonthlyReport = (props) => {
   );
 };
 
-export default MonthlyReport;
+export default React.memo(MonthlyReport);

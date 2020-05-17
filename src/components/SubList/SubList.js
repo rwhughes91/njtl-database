@@ -3,9 +3,9 @@ import LienListView from '../LienListView/LienListView';
 import Spinner from '../UI/Spinner/Spinner';
 import { Redirect } from 'react-router-dom';
 import SubListFormElement from '../../containers/SubBatch/SubListFormElement/SubListFormElement';
+import classes from './SubList.module.css';
 
 const SubList = ({ subData, subBatchVisited, subDate }) => {
-  console.log('sub list render');
   if (!subBatchVisited) {
     return <Redirect to='/subs' />;
   }
@@ -61,9 +61,13 @@ const SubList = ({ subData, subBatchVisited, subDate }) => {
         return <tr key={index}>{tds}</tr>;
       });
     };
-    return <LienListView {...props}>{tableRows}</LienListView>;
+    return (
+      <div className={classes.SubList}>
+        <LienListView {...props}>{tableRows}</LienListView>
+      </div>
+    );
   }
   return <Spinner />;
 };
 
-export default SubList;
+export default React.memo(SubList);

@@ -1,13 +1,28 @@
 .Modal {
   position: fixed;
+  left: 50%;
+  top: 25%;
   z-index: 500;
-  background-color: white;
-  width: 70%;
-  border: 1px solid #ccc;
-  box-shadow: 1px 1px 1px black;
-  padding: 16px;
-  left: 15%;
-  top: 30%;
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 448px;
   box-sizing: border-box;
   transition: all 0.3s ease-out;
+  padding: 3rem;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.ModalShow {
+  transform: translate(-50%, 0);
+}
+
+.ModalHide {
+  transform: translate(-50%, -100vh);
+}
+
+@media (min-width: 769px) {
+  .Modal {
+    left: calc(50% + 11rem);
+  }
 }

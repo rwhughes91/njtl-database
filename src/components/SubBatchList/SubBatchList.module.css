@@ -1,0 +1,15 @@
+.SubBatchList {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 550px;
+  border-radius: 10px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.Title {
+  font-size: 2rem;
+  font-weight: normal;
+  color: #707070;
+  margin-bottom: 3.5rem;
+}

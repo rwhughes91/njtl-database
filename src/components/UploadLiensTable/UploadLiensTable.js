@@ -1,4 +1,5 @@
 import React from 'react';
+import classes from './UploadLiensTable.module.css';
 
 const UploadLiensTable = ({ fields }) => {
   const tableRows = [];
@@ -11,7 +12,7 @@ const UploadLiensTable = ({ fields }) => {
     );
   }
   return (
-    <table>
+    <table className={classes.Table}>
       <thead>
         <tr>
           <th>Field name</th>

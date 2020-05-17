@@ -22,22 +22,11 @@ const Auth = () => {
   const [passwordResetError, setPasswordResetError] = useState(null);
 
   useEffect(() => {
-    if (tokenEmailed.sent) {
-      const timer = setTimeout(() => {
-        setTokenEmailed({ sent: false, message: null, type: null });
-      }, 6500);
-      return () => clearTimeout(timer);
-    }
-  }, [tokenEmailed]);
-
-  useEffect(() => {
-    if (tokenMessage) {
-      const timer = setTimeout(() => {
-        dispatch(actions.tokenMessage(null));
-      }, 6500);
-      return () => clearTimeout(timer);
-    }
-  }, [tokenMessage, dispatch]);
+    return () => {
+      setTokenEmailed({ sent: false, message: null, type: null });
+      dispatch(actions.tokenMessage(null));
+    };
+  }, [dispatch]);
 
   const tokenSubmitHandler = useCallback(async (email) => {
     try {

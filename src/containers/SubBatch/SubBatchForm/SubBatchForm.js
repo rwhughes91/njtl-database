@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import classes from './SubBatchForm.module.css';
 import useForm from '../../../hooks/useForm/useForm';
 import formControls from './formControls';
@@ -13,51 +13,54 @@ const SubBatchForm = (props) => {
     input: {
       className: classes.InputElement,
       container: '',
-      label: '',
+      label: classes.Label,
       invalid: classes.Invalid,
-      errorMessage: '',
+      errorMessage: classes.ErrorMessage,
     },
     select: {
       className: classes.InputElement,
       container: '',
-      label: '',
-      invalid: '',
-      errorMessage: '',
+      label: classes.Label,
+      invalid: classes.Invalid,
+      errorMessage: classes.ErrorMessage,
     },
   };
-  const selectChangedHandler = (event) => {
+  const selectChangedHandler = (event, { updateField }) => {
     let value = event.target.value;
     if (value) {
       props.fieldSelected(value);
     } else {
+      props.setShowModal(true);
       props.clearBatchData();
+      updateField('');
     }
   };
-  const inputChangedHandler = (
-    event,
-    { updateField, controlName, validateField, setFormData }
-  ) => {
-    let value = event.target.value;
-    let existingDate = false;
-    if (props.subBatchDates) {
-      for (let dateTime of props.subBatchDates) {
-        const date = new Date(parseInt(dateTime)).toLocaleDateString();
-        if (date === value) {
-          existingDate = true;
-          break;
+  const inputChangedHandler = useCallback(
+    (event, { updateField, controlName, validateField, setFormData }) => {
+      let value = event.target.value;
+      let existingDate = false;
+      if (props.subBatchDates) {
+        for (let dateTime of props.subBatchDates) {
+          const date = new Date(parseInt(dateTime)).toLocaleDateString();
+          if (date === value) {
+            existingDate = true;
+            break;
+          }
         }
       }
-    }
-    updateField(value);
-    const actionObject = validateField(value, controlName, true, 0, false);
-    const payload = { ...actionObject };
-    if (existingDate) {
-      payload.data.valid = false;
-      payload.data.errorMessage = 'Cannot be an already batched date';
-      payload.formIsValid = false;
-    }
-    setFormData(payload);
-  };
+      updateField(value);
+      const actionObject = validateField(value, controlName, true, 0, false);
+      const payload = { ...actionObject };
+      if (existingDate) {
+        payload.data.valid = false;
+        payload.data.errorMessage = 'Cannot be an already batched date';
+        payload.formIsValid = false;
+      }
+      setFormData(payload);
+    },
+    [props.subBatchDates]
+  );
+
   const callbacks = {
     select: {
       inputChangedHandler: selectChangedHandler,
@@ -82,8 +85,12 @@ const SubBatchForm = (props) => {
   };
 
   const button = (
-    <Button btnType='Primary' disabled={!formData.formIsValid}>
-      Create new batch
+    <Button
+      btnType='Primary'
+      disabled={!formData.formIsValid}
+      style={{ width: '30%' }}
+    >
+      Create batch
     </Button>
   );
   const form = (
@@ -91,7 +98,12 @@ const SubBatchForm = (props) => {
       {props.children(formElements, button)}
     </form>
   );
-  return form;
+  return (
+    <div className={classes.SubBatchContainer}>
+      <h1 className={classes.FormTitle}>Create a new batch</h1>
+      {form}
+    </div>
+  );
 };
 
-export default SubBatchForm;
+export default React.memo(SubBatchForm);

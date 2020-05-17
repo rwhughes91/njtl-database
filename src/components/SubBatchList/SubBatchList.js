@@ -1,6 +1,6 @@
 import React from 'react';
-import classes from './SubBatchList.module.css';
 import LienListView from '../LienListView/LienListView';
+import classes from './SubBatchList.module.css';
 
 const SubBatchList = ({
   form,
@@ -42,11 +42,14 @@ const SubBatchList = ({
     list = <LienListView {...props}>{tableRows}</LienListView>;
   }
   return (
-    <div className={classes.SubBatchList}>
+    <div>
       {form}
-      {list}
+      <div className={classes.SubBatchList}>
+        <h1 className={classes.Title}>Previous batches</h1>
+        {list}
+      </div>
     </div>
   );
 };
 
-export default SubBatchList;
+export default React.memo(SubBatchList);

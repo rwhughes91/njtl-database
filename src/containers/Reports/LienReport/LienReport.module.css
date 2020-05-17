@@ -1,0 +1,63 @@
+.LienReportForm {
+  display: flex;
+  flex-flow: column;
+}
+
+.Input {
+  margin-bottom: 2rem;
+}
+.InputElement {
+  outline: none;
+  outline: none;
+  font: inherit;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 0.1rem solid #ebeef2;
+  padding: 1rem 0.5rem;
+  font-size: 1.4rem;
+  height: 3.8rem;
+}
+
+.InputElement:placeholder-shown + .Label {
+  transform: translateY(-2rem);
+  visibility: hidden;
+  opacity: 0;
+}
+
+.Label {
+  font-weight: bold;
+  display: block;
+  position: relative;
+  color: #707070;
+  font-weight: 400;
+  font-size: 1.4rem;
+  position: relative;
+  right: -0.65rem;
+  transition: transform 0.2s;
+  transform: translateY(-6rem);
+}
+
+.Invalid {
+  border: 1px solid red;
+}
+
+.ErrorMessage {
+  position: absolute;
+  top: 7rem;
+  color: red;
+  transition: opacity 0.4s;
+  opacity: 1;
+}
+
+.ErrorMessage:empty {
+  opacity: 0;
+}
+
+.FormTitle {
+  font-size: 2rem;
+  font-weight: normal;
+  color: #707070;
+  margin-bottom: 1rem;
+}

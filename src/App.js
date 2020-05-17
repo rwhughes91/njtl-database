@@ -37,10 +37,7 @@ function App() {
       flashMessage = <FlashMessage type='success' message={justLoggedIn} />;
     }
     const flashContainer = (
-      <FlashMessageContainer top='7rem'>
-        <FlashMessage type='info' message='Logged In' />
-        {flashMessage}
-      </FlashMessageContainer>
+      <FlashMessageContainer top='7rem'>{flashMessage}</FlashMessageContainer>
     );
     const desktopPages = (
       <Switch>

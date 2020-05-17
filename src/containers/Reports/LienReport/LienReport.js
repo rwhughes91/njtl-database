@@ -59,7 +59,8 @@ const LienReport = (props) => {
   };
 
   return (
-    <form onSubmit={submitHandler}>
+    <form onSubmit={submitHandler} className={classes.LienReportForm}>
+      <h1 className={classes.FormTitle}>Export liens</h1>
       {formElements}
       <Button btnType='Primary' disabled={!formData.formIsValid}>
         Submit
@@ -68,4 +69,4 @@ const LienReport = (props) => {
   );
 };
 
-export default LienReport;
+export default React.memo(LienReport);

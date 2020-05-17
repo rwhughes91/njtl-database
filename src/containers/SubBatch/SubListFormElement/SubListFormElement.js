@@ -37,8 +37,8 @@ const SubListFormElement = ({ lien_id, sub_type, sub_date, total }) => {
   const inputClassNames = {
     input: {
       className: classes.InputElement,
-      container: '',
-      label: '',
+      container: classes.Input,
+      label: classes.Label,
       invalid: classes.Invalid,
       errorMessage: '',
     },

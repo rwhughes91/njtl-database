@@ -1,9 +1,26 @@
 .Backdrop {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.2);
   z-index: 400;
   width: 200vw;
   height: 200vh;
   position: fixed;
+  left: 0;
   top: -10px;
   display: none;
+  backdrop-filter: blur(0.5px);
+}
+@media (min-width: 770px) {
+  .Backdrop {
+    left: 20%;
+  }
+}
+@media (min-width: 1024px) {
+  .Backdrop {
+    left: 20rem;
+  }
+}
+@media (min-width: 1280px) {
+  .Backdrop {
+    left: 22rem;
+  }
 }

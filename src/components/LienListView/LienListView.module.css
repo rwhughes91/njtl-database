@@ -19,10 +19,6 @@
   color: #707070;
 }
 
-.Table tr:last-child {
-  border-bottom: 1px solid white;
-}
-
 .Table tr:hover td {
   color: #32373d;
   cursor: pointer;
@@ -42,6 +38,15 @@
   .EmptyMessage {
     position: relative;
     top: -1rem !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .Table th {
+    font-size: 1.1rem;
+  }
+  .Table td {
+    font-size: 1rem;
   }
 }
 

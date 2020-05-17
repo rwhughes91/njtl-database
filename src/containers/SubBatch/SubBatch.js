@@ -1,9 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import SubBatchForm from './SubBatchForm/SubBatchForm';
 import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import useAxios from '../../hooks/useAxios/useAxios';
 import SubBatchList from '../../components/SubBatchList/SubBatchList';
 import SubList from '../../components/SubList/SubList';
+import Modal from '../../components/UI/Modal/Modal';
+import classes from './SubBatch.module.css';
 
 const subBatchQuery = `
 query fetchSubBatch($county: String!) {
@@ -48,6 +50,7 @@ query fetchOpenLiens($county: String!) {
 
 const SubBatch = () => {
   const [lastCounty, setLastCounty] = useState(null);
+  const [showModal, setShowModal] = useState(null);
   const [subBatchData, sendRequestSubBatchData, clearSubBatch] = useAxios();
   const [subListData, sendRequestSubListData, clearSubList] = useAxios();
   const history = useHistory();
@@ -66,22 +69,33 @@ const SubBatch = () => {
     }
   }, [lastCounty, sendRequestSubBatchData, location.pathname]);
 
-  const updateSubListData = (query, variables, queryName, date) => {
-    sendRequestSubListData(
-      {
-        query,
-        variables,
-      },
-      queryName
-    );
-    subDate.current = date;
-    history.push('/subs/batch');
-  };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowModal(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
-  const onFieldChangeHandler = (county) => {
+  const updateSubListData = useCallback(
+    (query, variables, queryName, date) => {
+      sendRequestSubListData(
+        {
+          query,
+          variables,
+        },
+        queryName
+      );
+      subDate.current = date;
+      history.push('/subs/batch');
+    },
+    [sendRequestSubListData, history]
+  );
+
+  const onFieldChangeHandler = useCallback((county) => {
     setLastCounty(county);
+    setShowModal(false);
     subBatchVisited.current = true;
-  };
+  }, []);
 
   const tableRowClickHandler = (date) => {
     clearSubList();
@@ -101,6 +115,7 @@ const SubBatch = () => {
 
   let form = (
     <SubBatchForm
+      setShowModal={setShowModal}
       fieldSelected={onFieldChangeHandler}
       clearBatchData={clearSubBatch}
       data={lastCounty}
@@ -110,13 +125,14 @@ const SubBatch = () => {
       {(formElements, button) => {
         return (
           <>
-            {formElements[0]}
-            {subBatchData.data && (
-              <>
-                {formElements.slice(1)}
-                {button}
-              </>
-            )}
+            <Modal show={showModal}>
+              <h1 className={classes.ModalTitle}>
+                Select the township you want to pay subs on
+              </h1>
+              {formElements[0]}
+            </Modal>
+            {formElements}
+            {button}
           </>
         );
       }}
@@ -146,4 +162,4 @@ const SubBatch = () => {
   );
 };
 
-export default SubBatch;
+export default React.memo(SubBatch);

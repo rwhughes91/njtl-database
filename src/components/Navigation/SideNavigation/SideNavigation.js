@@ -17,7 +17,7 @@ const SideNavigation = (props) => {
         />
         <ul className={classes.SideNavigationItems}>
           <NavigationItem link='/' pathsToMatch={['/', /^\/lien\/\d+/]}>
-            Home
+            Search
           </NavigationItem>
           <NavigationItem link='/upload' pathsToMatch={['/upload']}>
             Upload

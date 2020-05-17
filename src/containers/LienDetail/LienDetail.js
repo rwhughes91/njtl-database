@@ -5,7 +5,9 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import * as actions from '../../store/actions/index';
 import { useSelector, useDispatch } from 'react-redux';
 import LienDetailEditForm from './LienDetailEditForm/LienDetailEditForm';
-import FlashMessage from '../../components/UI/FlashMessage/FlashMessage';
+import FlashMessage, {
+  FlashMessageContainer,
+} from '../../components/UI/FlashMessage/FlashMessage';
 
 const LienDetail = () => {
   const { lien_id } = useParams();
@@ -30,24 +32,36 @@ const LienDetail = () => {
       dispatch(actions.fetchLien(variables, token));
     }
   }, [variables, currentLien, dispatch, token]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(actions.clearLienUpdate());
+    };
+  }, [dispatch]);
+
+  const flashMessagesArray = [];
   let successMessage;
   if (updateSuccessMessage) {
-    successMessage = (
-      <FlashMessage type='success' message={updateSuccessMessage} />
-    );
+    successMessage = { type: 'success', message: updateSuccessMessage };
+    flashMessagesArray.push(successMessage);
   }
   let errorMessage;
   if (updateErrorMessage && updateErrorMessage.displayMessage) {
-    errorMessage = (
-      <FlashMessage type='error' message={updateErrorMessage.displayMessage} />
-    );
+    errorMessage = {
+      type: 'error',
+      message: updateErrorMessage.displayMessage,
+    };
+    flashMessagesArray.push(errorMessage);
   }
   let form = <Spinner />;
   if (currentLien) {
     form = (
       <>
-        {successMessage}
-        {errorMessage}
+        <FlashMessageContainer top='7rem'>
+          {flashMessagesArray.map((flashMessage, index) => {
+            return <FlashMessage {...flashMessage} key={index} />;
+          })}
+        </FlashMessageContainer>
         <LienDetailEditForm
           data={{ ...currentLien }}
           lien_id={variables.lien_id}

@@ -5,10 +5,10 @@ import { CSSTransition } from 'react-transition-group';
 export const FlashMessageContainer = (props) => {
   let style = { top: props.top, right: props.right, width: props.width };
   if (props.center) {
-    style = {
+    style = Object.assign(style, {
       right: '50%',
       transform: 'translateX(50%)',
-    };
+    });
   }
   return (
     <div className={classes.FlashMessageContainer} style={style}>

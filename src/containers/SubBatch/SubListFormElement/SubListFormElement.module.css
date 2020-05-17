@@ -1,7 +1,47 @@
 .InputElement {
   outline: none;
+  font: inherit;
+  display: block;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 0.1rem solid #ebeef2;
+  padding: 0 0.5rem;
+  font-size: 1.2rem;
+  margin: 0 auto;
+  background-color: #ebeef2;
+  color: #32373d;
+}
+.Label {
+  font-weight: bold;
+  display: block;
+  position: relative;
+  color: #707070;
+  font-weight: 400;
+  font-size: 1.3rem;
+  position: relative;
+  right: -0.65rem;
+  transition: transform 0.2s;
+  transform: translateY(-4.5rem);
 }
 
 .Invalid {
   border: 1px solid red;
+}
+
+@media (max-width: 769px) {
+  .InputElement {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .InputElement {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .InputElement {
+    font-size: 0.9rem;
+  }
 }

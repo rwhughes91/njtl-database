@@ -14,7 +14,7 @@ const Navigation = () => {
   let page = 'Home';
   switch (location.pathname) {
     case '/':
-      page = 'Home';
+      page = 'Search';
       break;
     case '/subs':
       page = 'Subs';
@@ -26,7 +26,12 @@ const Navigation = () => {
       page = 'Reports';
       break;
     default:
-      page = 'Home';
+      page = 'Search';
+  }
+  if (location.pathname.startsWith('/lien/')) {
+    page = 'Detail';
+  } else if (location.pathname.startsWith('/subs/')) {
+    page = 'Subs';
   }
 
   const onSubmitHandler = useCallback(
