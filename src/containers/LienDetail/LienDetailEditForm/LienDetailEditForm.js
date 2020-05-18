@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import classes from './LienDetailEditForm.module.css';
 import formControls from './formControls';
@@ -43,17 +43,21 @@ const LienDetailEditForm = ({ data, lien_id }) => {
     },
   };
 
-  const inputChangedHandler = (event, { updateField }) => {
+  const inputChangedHandler = useCallback((event, { updateField }) => {
     updateField(event.target.value);
-  };
+  }, []);
 
-  const selectFieldChangedHandler = (event, { updateField }) => {
+  const textAreaChangedHandler = useCallback((event, { updateField }) => {
     updateField(event.target.value, 0);
-  };
+  }, []);
 
-  const blurHandler = (event, { controlName, setFormData }) => {
+  const selectFieldChangedHandler = useCallback((event, { updateField }) => {
+    updateField(event.target.value, 0);
+  }, []);
+
+  const blurHandler = useCallback((event, { controlName, setFormData }) => {
     setFormData({ type: 'UPDATE_FIELD_TO_DISPLAY_VALUE', controlName });
-  };
+  }, []);
 
   const callbacks = {
     input: {
@@ -65,7 +69,7 @@ const LienDetailEditForm = ({ data, lien_id }) => {
       blurHandler,
     },
     textarea: {
-      inputChangedHandler,
+      inputChangedHandler: textAreaChangedHandler,
       blurHandler,
     },
   };
@@ -214,4 +218,4 @@ const LienDetailEditForm = ({ data, lien_id }) => {
   return form;
 };
 
-export default LienDetailEditForm;
+export default React.memo(LienDetailEditForm);

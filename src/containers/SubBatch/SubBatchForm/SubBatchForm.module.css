@@ -55,10 +55,11 @@
 
 .ErrorMessage {
   position: absolute;
-  top: 9rem;
+  top: 15.8rem;
   color: red;
   transition: opacity 0.4s;
   opacity: 1;
+  font-size: 1.1rem;
 }
 
 .ErrorMessage:empty {

@@ -5,6 +5,7 @@
 
 .Input {
   margin-bottom: 2rem;
+  position: relative;
 }
 .InputElement {
   outline: none;
@@ -45,7 +46,7 @@
 
 .ErrorMessage {
   position: absolute;
-  top: 7rem;
+  top: 4em;
   color: red;
   transition: opacity 0.4s;
   opacity: 1;
@@ -59,5 +60,5 @@
   font-size: 2rem;
   font-weight: normal;
   color: #707070;
-  margin-bottom: 1rem;
+  margin-bottom: 2.5rem;
 }

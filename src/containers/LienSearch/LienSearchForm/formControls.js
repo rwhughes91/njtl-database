@@ -23,7 +23,7 @@ const formControls = {
     touched: false,
     errorMessage: '',
   },
-  qual: {
+  qualifier: {
     elementType: 'input',
     elementConfig: {
       type: 'text',

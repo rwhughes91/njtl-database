@@ -9,6 +9,9 @@ import axios from '../../axios-liens';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import classes from './Reports.module.css';
+import FlashMessage, {
+  FlashMessageContainer,
+} from '../../components/UI/FlashMessage/FlashMessage';
 
 const exportToExcel = (excelData, fileName) => {
   const fileType =
@@ -27,7 +30,19 @@ const exportToExcel = (excelData, fileName) => {
 const Reports = () => {
   const [showModal, setShowModal] = useState({ show: false, child: null });
   const token = useSelector((state) => state.auth.token);
+  const [flashMessageErrors, setFlashMessageErrors] = useState({
+    getLienReport: null,
+    getMonthlyReport: null,
+    getTownships: null,
+  });
+  // const flashMessagesArray = [];
   const getTownships = async () => {
+    setFlashMessageErrors((prevState) => {
+      return {
+        ...prevState,
+        getTownships: null,
+      };
+    });
     try {
       const response = await axios.post(
         '/graphql',
@@ -47,12 +62,23 @@ const Reports = () => {
       });
       exportToExcel(excelData, 'townships');
     } catch (err) {
-      console.log(err);
+      setFlashMessageErrors((prevState) => {
+        return {
+          ...prevState,
+          getTownships: { type: 'error', message: 'Could not get townships' },
+        };
+      });
     }
   };
 
   const getLienReport = useCallback(
     async (variables) => {
+      setFlashMessageErrors((prevState) => {
+        return {
+          ...prevState,
+          getLienReport: null,
+        };
+      });
       try {
         const response = await axios.post(
           '/graphql',
@@ -70,7 +96,15 @@ const Reports = () => {
         const excelData = response.data.data.getLiens.liens;
         exportToExcel(excelData, 'exportedLiens');
       } catch (err) {
-        console.log(err);
+        setFlashMessageErrors((prevState) => {
+          return {
+            ...prevState,
+            getLienReport: {
+              type: 'error',
+              message: 'Could not get lien report',
+            },
+          };
+        });
       }
     },
     [token]
@@ -78,6 +112,12 @@ const Reports = () => {
 
   const getMonthlyReport = useCallback(
     async (queryName, variables, title) => {
+      setFlashMessageErrors((prevState) => {
+        return {
+          ...prevState,
+          getMonthlyReport: null,
+        };
+      });
       const queryId =
         queryName === 'getMonthlyRedemptions'
           ? 'fetchMonthlyRedemptions'
@@ -99,11 +139,26 @@ const Reports = () => {
         const excelData = response.data.data[queryName];
         exportToExcel(excelData, title);
       } catch (err) {
-        console.log(err);
+        setFlashMessageErrors((prevState) => {
+          return {
+            ...prevState,
+            getMonthlyReport: {
+              type: 'error',
+              message: 'Could not get monthly report',
+            },
+          };
+        });
       }
     },
     [token]
   );
+
+  const flashMessagesArray = [];
+  for (let key in flashMessageErrors) {
+    if (flashMessageErrors[key]) {
+      flashMessagesArray.push(flashMessageErrors[key]);
+    }
+  }
 
   let children = null;
   switch (showModal.child) {
@@ -192,6 +247,11 @@ const Reports = () => {
   });
   return (
     <>
+      <FlashMessageContainer top='7rem'>
+        {flashMessagesArray.map((flashMessage, index) => {
+          return <FlashMessage {...flashMessage} key={index} />;
+        })}
+      </FlashMessageContainer>
       {modal}
       <div className={classes.Reports}>
         <h1 className={classes.Title}>Download reports</h1>
