@@ -82,8 +82,8 @@ const formValidation = (value, rules) => {
     }
   }
   if (rules.isDate) {
-    const date = new Date(value);
-    isValid = date.toString() !== 'Invalid Date' && isValid;
+    const date = /[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}/;
+    isValid = date.test(value) && isValid;
     if (!isValid) {
       errorMessage = 'Must be a valid date';
       return [isValid, errorMessage];

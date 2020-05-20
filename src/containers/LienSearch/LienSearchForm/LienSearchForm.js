@@ -33,15 +33,12 @@ const LienSearchForm = (props) => {
     if (timer.current) {
       clearTimeout(timer.current);
     }
-    timer.current = setTimeout(validatorFn, 1000);
+    timer.current = setTimeout(validatorFn, 500);
   }, []);
 
   const inputChangedHandler = useCallback(
     (event, { controlName, updateField, validateField }) => {
       let value = event.target.value;
-      if (controlName === 'sale_year') {
-        value = parseInt(value);
-      }
       updateField(value);
       validateInputTimer(() => {
         validateField(value, controlName);
@@ -92,8 +89,9 @@ const LienSearchForm = (props) => {
         dispatch(actions.clearLien());
         dispatch(actions.fetchLiens(variables, token));
       }
+      setFormData({ type: 'RESET_FORM' });
     },
-    [dispatch, formData.controls, props.failed, token]
+    [dispatch, formData.controls, props.failed, token, setFormData]
   );
 
   const form = (

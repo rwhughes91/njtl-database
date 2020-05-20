@@ -11,6 +11,7 @@ const dateData = [
   ['12/1', '12/1'],
   ['12/', '12/'],
   ['01/1/2010', '1/1/2010'],
+  ['badData', 'badData'],
 ];
 
 const percentData = [
@@ -19,6 +20,7 @@ const percentData = [
   ['40%', '40%'],
   ['0', '0%'],
   ['', '0%'],
+  ['badData', 'badData'],
 ];
 
 const percentData2 = [
@@ -39,6 +41,7 @@ const currencyData = [
   ['$1,000', '$1,000.00'],
   ['1,000', '$1,000.00'],
   ['', '$0.00'],
+  ['badData', 'badData'],
 ];
 
 const currencyData2 = [

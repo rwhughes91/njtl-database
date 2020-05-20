@@ -6,6 +6,7 @@ import SubBatchList from '../../components/SubBatchList/SubBatchList';
 import SubList from '../../components/SubList/SubList';
 import Modal from '../../components/UI/Modal/Modal';
 import classes from './SubBatch.module.css';
+import BadConnection from '../../components/Errors/BadConnection';
 
 const subBatchQuery = `
 query fetchSubBatch($county: String!) {
@@ -139,26 +140,33 @@ const SubBatch = () => {
     </SubBatchForm>
   );
 
+  let error;
+  if (subBatchData.error) {
+    error = <BadConnection />;
+  }
+
   return (
-    <>
-      <Switch>
-        <Route path='/subs' exact>
-          <SubBatchList
-            form={form}
-            subBatchData={subBatchData.data}
-            tableRowClickHandler={tableRowClickHandler}
-            lastCounty={lastCounty}
-          />
-        </Route>
-        <Route path='/subs/batch' exact>
-          <SubList
-            subBatchVisited={subBatchVisited.current}
-            subData={subListData.data}
-            subDate={subDate.current}
-          />
-        </Route>
-      </Switch>
-    </>
+    error || (
+      <>
+        <Switch>
+          <Route path='/subs' exact>
+            <SubBatchList
+              form={form}
+              subBatchData={subBatchData.data}
+              tableRowClickHandler={tableRowClickHandler}
+              lastCounty={lastCounty}
+            />
+          </Route>
+          <Route path='/subs/batch' exact>
+            <SubList
+              subBatchVisited={subBatchVisited.current}
+              subData={subListData.data}
+              subDate={subDate.current}
+            />
+          </Route>
+        </Switch>
+      </>
+    )
   );
 };
 

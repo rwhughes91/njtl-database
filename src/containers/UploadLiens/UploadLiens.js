@@ -12,6 +12,7 @@ import FlashMessage, {
   FlashMessageContainer,
 } from '../../components/UI/FlashMessage/FlashMessage';
 import * as FileSaver from 'file-saver';
+import BadConnection from '../../components/Errors/BadConnection';
 
 const getUploadTemplateQuery = `
 query fetchUploadTemplate {
@@ -153,6 +154,7 @@ const UploadLiens = () => {
           errorMessage: err.response.data.message,
         });
       });
+      setSelectedFile(null);
     },
     []
   );
@@ -224,24 +226,30 @@ const UploadLiens = () => {
 
   const flashMessagesArray = [];
 
-  let flashMessage;
   if (!liensUploading.uploading) {
     if (liensUploading.success) {
-      flashMessage = { type: 'success', message: 'Liens uploaded' };
+      let flashMessage = { type: 'success', message: 'Liens uploaded' };
       flashMessagesArray.push(flashMessage);
     } else if (liensUploading.errorMessage) {
-      flashMessage = { type: 'error', message: liensUploading.errorMessage };
+      let flashMessage = {
+        type: 'error',
+        message: liensUploading.errorMessage,
+      };
       flashMessagesArray.push(flashMessage);
     }
   }
 
-  let errorLogFlashMessage;
   if (errorLogMessage) {
-    errorLogFlashMessage = { type: 'error', message: errorLogMessage };
+    let errorLogFlashMessage = { type: 'error', message: errorLogMessage };
     flashMessagesArray.push(errorLogFlashMessage);
   }
 
-  let uploadOutput = <Spinner />;
+  let error;
+  if (uploadData.error) {
+    error = <BadConnection />;
+  }
+
+  let uploadOutput = error || <Spinner />;
   if (uploadData.data && !liensUploading.uploading) {
     const downloads = (
       <div className={classes.UploadForm}>

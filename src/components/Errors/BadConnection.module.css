@@ -1,0 +1,16 @@
+.BadConnection {
+  position: fixed;
+  top: 10rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.BadConnection h1 {
+  font-size: 3rem;
+  color: #323b32;
+}
+
+.BadConnection p {
+  font-size: 2rem;
+  color: #707070;
+}

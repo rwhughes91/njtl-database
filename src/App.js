@@ -1,19 +1,28 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Navigation from './components/Navigation/Navigation';
 import Layout from './components/Layout/Layout';
-import LienSearch from './containers/LienSearch/LienSearch';
-import LienDetail from './containers/LienDetail/LienDetail';
-import SubBatch from './containers/SubBatch/SubBatch.js';
-import UploadLiens from './containers/UploadLiens/UploadLiens';
-import Reports from './containers/Reports/Reports';
 import Auth from './containers/Auth/Auth';
-import * as actions from './store/actions/index';
 import Logout from './containers/Auth/Logout/Logout';
+import * as actions from './store/actions/index';
 import FlashMessage, {
   FlashMessageContainer,
 } from './components/UI/FlashMessage/FlashMessage';
+import Spinner from './components/UI/Spinner/Spinner';
+import LazyLoadingErrorBoundary from './errorBoundaries/LazyLoadingErrorBoundary';
+
+const LienSearch = React.lazy(() =>
+  import('./containers/LienSearch/LienSearch')
+);
+const LienDetail = React.lazy(() =>
+  import('./containers/LienDetail/LienDetail')
+);
+const SubBatch = React.lazy(() => import('./containers/SubBatch/SubBatch'));
+const UploadLiens = React.lazy(() =>
+  import('./containers/UploadLiens/UploadLiens')
+);
+const Reports = React.lazy(() => import('./containers/Reports/Reports'));
 
 function App() {
   const dispatch = useDispatch();
@@ -22,6 +31,18 @@ function App() {
   useEffect(() => {
     dispatch(actions.authCheckState());
   }, [dispatch]);
+
+  const mainSpinner = (
+    <div
+      style={{
+        position: 'fixed',
+        top: '10rem',
+        left: '50%',
+      }}
+    >
+      <Spinner />
+    </div>
+  );
 
   let pages = (
     <Switch>
@@ -77,11 +98,15 @@ function App() {
     pages = (
       <>
         <Navigation />
-        <Layout
-          flashContainer={flashContainer}
-          desktopPages={desktopPages}
-          mobilePages={mobilePages}
-        />
+        <LazyLoadingErrorBoundary>
+          <Suspense fallback={mainSpinner}>
+            <Layout
+              flashContainer={flashContainer}
+              desktopPages={desktopPages}
+              mobilePages={mobilePages}
+            />
+          </Suspense>
+        </LazyLoadingErrorBoundary>
       </>
     );
   }

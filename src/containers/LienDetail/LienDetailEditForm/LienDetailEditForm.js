@@ -6,6 +6,7 @@ import useForm from '../../../hooks/useForm/useForm';
 import Button from '../../../components/UI/Button/Button';
 import * as actions from '../../../store/actions/index';
 import LienListView from '../../../components/LienListView/LienListView';
+import { isEqual } from 'lodash/lang';
 
 const LienDetailEditForm = ({ data, lien_id }) => {
   const dispatch = useDispatch();
@@ -43,9 +44,13 @@ const LienDetailEditForm = ({ data, lien_id }) => {
     },
   };
 
-  const inputChangedHandler = useCallback((event, { updateField }) => {
-    updateField(event.target.value);
-  }, []);
+  const inputChangedHandler = useCallback(
+    (event, { updateField, validateField, controlName }) => {
+      updateField(event.target.value);
+      validateField(event.target.value, controlName);
+    },
+    []
+  );
 
   const textAreaChangedHandler = useCallback((event, { updateField }) => {
     updateField(event.target.value, 0);
@@ -218,4 +223,4 @@ const LienDetailEditForm = ({ data, lien_id }) => {
   return form;
 };
 
-export default React.memo(LienDetailEditForm);
+export default React.memo(LienDetailEditForm, isEqual);

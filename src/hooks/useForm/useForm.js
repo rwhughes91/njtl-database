@@ -17,6 +17,19 @@ const inputDefaultCallbacks = {
   textarea: {},
 };
 
+export const isFormValid = (controls, controlName = null, valid = null) => {
+  let formIsValid = true;
+  if (valid === false) return false;
+  for (let inputIdentifier in controls) {
+    if (controlName && valid !== null && inputIdentifier === controlName) {
+      formIsValid = valid && formIsValid;
+    } else {
+      formIsValid = controls[inputIdentifier].valid && formIsValid;
+    }
+  }
+  return formIsValid;
+};
+
 const useForm = (
   formControlData,
   inputConfigs = inputDefaultConfigs,
@@ -118,21 +131,6 @@ const useForm = (
     }
   }, [data]);
 
-  const isFormValid = useCallback(
-    (controlName = null, valid = null) => {
-      let formIsValid = true;
-      for (let inputIdentifier in formData.controls) {
-        if (controlName && valid !== null && inputIdentifier === controlName) {
-          formIsValid = valid && formIsValid;
-        } else {
-          formIsValid = formData.controls[inputIdentifier].valid && formIsValid;
-        }
-      }
-      return formIsValid;
-    },
-    [formData]
-  );
-
   const inputChangedHandler = useCallback(
     (value, controlName, fieldLength = 1, toDispatch = true) => {
       let updatedControls;
@@ -149,16 +147,7 @@ const useForm = (
             value,
           },
         };
-        // let formIsValid = true;
-        // for (let inputIdentifier in formData.controls) {
-        //   if (inputIdentifier === controlName) {
-        //     formIsValid = valid && formIsValid;
-        //   } else {
-        //     formIsValid =
-        //       formData.controls[inputIdentifier].valid && formIsValid;
-        //   }
-        // }
-        const formIsValid = isFormValid(controlName, valid);
+        const formIsValid = isFormValid(formData.controls, controlName, valid);
         updatedControls.formIsValid = formIsValid;
       } else {
         updatedControls = {
@@ -179,7 +168,7 @@ const useForm = (
       }
       return payload;
     },
-    [formData, isFormValid]
+    [formData]
   );
 
   const validateInputHandler = useCallback(
@@ -203,16 +192,7 @@ const useForm = (
             errorMessage: errorMessageValidation ? errorMessage : '',
           },
         };
-        // let formIsValid = true;
-        // for (let inputIdentifier in formData.controls) {
-        //   if (inputIdentifier === controlName) {
-        //     formIsValid = valid && formIsValid;
-        //   } else {
-        //     formIsValid =
-        //       formData.controls[inputIdentifier].valid && formIsValid;
-        //   }
-        // }
-        const formIsValid = isFormValid(controlName, valid);
+        const formIsValid = isFormValid(formData.controls, controlName, valid);
         updatedControls.formIsValid = formIsValid;
         const payload = {
           type: 'UPDATE_FIELD',
@@ -224,7 +204,7 @@ const useForm = (
         return payload;
       }
     },
-    [formData, isFormValid]
+    [formData]
   );
 
   const formElementsArray = [];

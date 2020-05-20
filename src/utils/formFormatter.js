@@ -2,11 +2,13 @@ const dateFormatter = (value, display) => {
   if (typeof value === 'string') {
     if (display) {
       if (value.length <= 2) return value;
-      if (!(value.charAt(1) === '/' || value.charAt(2) === '/')) {
-        return new Date(parseInt(value)).toLocaleDateString();
-      }
       if (value.charAt(0) === '0') {
         return new Date(value).toLocaleDateString();
+      }
+      if (!(value.charAt(1) === '/' || value.charAt(2) === '/')) {
+        return isNaN(value)
+          ? value
+          : new Date(parseInt(value)).toLocaleDateString();
       }
       return value;
     } else {
@@ -28,7 +30,7 @@ const percentageFormatter = (value, display) => {
           if (value === '') {
             return '0%';
           }
-          return `${value}%`;
+          return isNaN(value) ? value : `${value}%`;
         }
       } else {
         if (value.includes('%')) {
@@ -60,10 +62,12 @@ const currencyFormatter = (value, display) => {
           newValue = newValue.replace(/,/, '');
         }
       }
-      return Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }).format(newValue);
+      return isNaN(newValue)
+        ? value
+        : Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+          }).format(newValue);
     } else {
       let newValue = value;
       if (typeof value === 'string') {

@@ -52,6 +52,7 @@
 .Input {
   padding: 1rem;
   width: 100%;
+  position: relative;
 }
 
 .Label {
@@ -65,6 +66,7 @@
   right: -0.4rem;
   transition: transform 0.2s;
   transform: translateY(-4.5rem);
+  white-space: nowrap;
 }
 
 .InputElement {
@@ -102,10 +104,11 @@
 
 .ErrorMessage {
   position: absolute;
-  top: 2.5rem;
+  top: 3.5rem;
   color: red;
   transition: opacity 0.4s;
   opacity: 1;
+  white-space: nowrap;
 }
 
 .ErrorMessage:empty {
@@ -169,6 +172,9 @@
   .InputElement {
     font-size: 1.1rem;
   }
+  .ErrorMessage {
+    font-size: 0.9rem;
+  }
 }
 
 @media (max-width: 1050px) {
@@ -177,7 +183,6 @@
     margin-top: 0;
     margin-bottom: 0;
   }
-
   .FormType {
     width: 80%;
     margin: 1rem auto;
@@ -191,10 +196,32 @@
   .InputElement {
     font-size: 1rem;
   }
+  .ErrorMessage {
+    font-size: 0.9rem;
+  }
 }
 
 @media (max-width: 425px) {
   .FormType {
     width: 100%;
+  }
+  .ErrorMessage {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 300px) {
+  .FormType {
+    flex-flow: column;
+  }
+  .FormColumn {
+    flex-flow: column;
+    width: 100%;
+  }
+  .InputElement {
+    width: 100%;
+  }
+  .FormRow {
+    flex-flow: column;
   }
 }

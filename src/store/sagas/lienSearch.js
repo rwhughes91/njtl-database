@@ -27,6 +27,7 @@ query FetchLiensCount($block: String, $lot: String, $qualifier: String, $certifi
 
 export function* fetchLiensSaga(action) {
   yield put(actions.clearLiens());
+  yield put(actions.fetchLiensStart());
   try {
     const countResponse = yield call(
       axios.post,
