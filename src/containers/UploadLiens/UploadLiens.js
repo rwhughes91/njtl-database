@@ -8,9 +8,6 @@ import UploadLiensTable from '../../components/UploadLiensTable/UploadLiensTable
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Button from '../../components/UI/Button/Button';
 import socket from '../../socket';
-import FlashMessage, {
-  FlashMessageContainer,
-} from '../../components/UI/FlashMessage/FlashMessage';
 import * as FileSaver from 'file-saver';
 import BadConnection from '../../components/Errors/BadConnection';
 
@@ -80,7 +77,6 @@ const UploadLiens = () => {
   const [showUpload, setShowUpload] = useState(true);
   const [showTable, setShowTable] = useState(false);
   const [uploadData, requestUploadData] = useAxios();
-  const [errorLogMessage, setErrorLogMessage] = useState(null);
   const uploadStartState = useMemo(() => {
     return {
       uploading: false,
@@ -112,6 +108,11 @@ const UploadLiens = () => {
     });
     socket.on('uploadDone', ({ success, errorMessage }) => {
       setLiensUploading({ uploading: false, success, errorMessage });
+      if (success) {
+        window.flash('Liens Uploaded', 'success');
+      } else if (errorMessage) {
+        window.flash(errorMessage, 'error');
+      }
     });
     return () => {
       socket.off('uploadingState');
@@ -153,6 +154,7 @@ const UploadLiens = () => {
           success: false,
           errorMessage: err.response.data.message,
         });
+        window.flash(err.response.data.message, 'error');
       });
       setSelectedFile(null);
     },
@@ -164,21 +166,20 @@ const UploadLiens = () => {
   }, []);
 
   const onErrorLogClickHandler = useCallback((token) => {
-    setErrorLogMessage(null);
     Axios.get('http://localhost:4000/upload', {
       responseType: 'blob',
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
         if (res.headers['content-type'].startsWith('application/json')) {
-          setErrorLogMessage(res.data);
+          window.flash(res.data, 'error');
         } else {
           const data = new Blob([res.data]);
           FileSaver.saveAs(data, 'uploadErrorLog.xlsx');
         }
       })
       .catch(() => {
-        setErrorLogMessage('Something went wrong');
+        window.flash('Something went wrong', 'error');
       });
   }, []);
 
@@ -224,26 +225,6 @@ const UploadLiens = () => {
     </>
   );
 
-  const flashMessagesArray = [];
-
-  if (!liensUploading.uploading) {
-    if (liensUploading.success) {
-      let flashMessage = { type: 'success', message: 'Liens uploaded' };
-      flashMessagesArray.push(flashMessage);
-    } else if (liensUploading.errorMessage) {
-      let flashMessage = {
-        type: 'error',
-        message: liensUploading.errorMessage,
-      };
-      flashMessagesArray.push(flashMessage);
-    }
-  }
-
-  if (errorLogMessage) {
-    let errorLogFlashMessage = { type: 'error', message: errorLogMessage };
-    flashMessagesArray.push(errorLogFlashMessage);
-  }
-
   let error;
   if (uploadData.error) {
     error = <BadConnection />;
@@ -269,11 +250,6 @@ const UploadLiens = () => {
     );
     uploadOutput = (
       <>
-        <FlashMessageContainer top='7rem'>
-          {flashMessagesArray.map((flashMessage, index) => {
-            return <FlashMessage {...flashMessage} key={index} />;
-          })}
-        </FlashMessageContainer>
         <div
           className={[
             classes.UploadLiens,

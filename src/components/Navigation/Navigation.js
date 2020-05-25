@@ -28,6 +28,9 @@ const Navigation = () => {
     case '/reports':
       page = 'Reports';
       break;
+    case '/dashboard':
+      page = 'Dashboard';
+      break;
     default:
       page = 'Search';
   }
@@ -66,7 +69,7 @@ const Navigation = () => {
       />
       <div className={classes.Navigation}>
         <p className={classes.Breadcrumb}>{page}</p>
-        <NavigationItems />
+        <NavigationItems dashboard={page === 'Dashboard'} />
       </div>
     </>
   );

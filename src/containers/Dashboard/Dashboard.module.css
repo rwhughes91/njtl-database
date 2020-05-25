@@ -1,0 +1,45 @@
+.Dashboard {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+  width: 98%;
+  margin: 0 auto;
+  margin-top: 1rem;
+}
+
+.DashboardPanelRow {
+  display: flex;
+  flex-flow: row;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.DashboardPanelRow:first-child {
+  height: 10rem;
+}
+
+.DashboardPanelRow:nth-child(2),
+.DashboardPanelRow:last-child {
+  height: 30rem;
+}
+
+.Select {
+  outline: none;
+  font: inherit;
+  display: block;
+  box-sizing: border-box;
+  height: 2.5rem;
+  border-radius: 5px;
+  border: 0.1rem solid #ebeef2;
+  padding: 0 0.5rem;
+  font-size: 1.4rem;
+  width: 20rem;
+  margin-right: 0.5rem;
+}
+
+.SelectContainer {
+  display: flex;
+  flex-flow: row-reverse;
+  width: 98%;
+  margin: 1rem auto 0 auto;
+}

@@ -4,9 +4,6 @@ import classes from './LienSearch.module.css';
 import * as actions from '../../store/actions/index';
 import LienSearchForm from './LienSearchForm/LienSearchForm';
 import LienSearchList from '../LienSearchList/LienSearchList';
-import FlashMessage, {
-  FlashMessageContainer,
-} from '../../components/UI/FlashMessage/FlashMessage';
 import withSizes from 'react-sizes';
 import MobileLienSearchFrom from './MobileLienSearchForm/MobileLienSearchForm';
 
@@ -22,17 +19,14 @@ const LienSearch = ({ isMobile }) => {
     };
   }, [dispatch]);
 
-  const flashMessagesArray = [];
-  let error = null;
-  if (lienDetailError) {
-    error = { type: 'error', message: lienDetailError.displayMessage };
-    flashMessagesArray.push(error);
-  }
-  let listError = null;
-  if (lienSearchError) {
-    listError = { type: 'error', message: lienSearchError.displayMessage };
-    flashMessagesArray.push(listError);
-  }
+  useEffect(() => {
+    if (lienDetailError) {
+      window.flash(lienDetailError.displayMessage, 'error');
+    }
+    if (lienSearchError) {
+      window.flash(lienSearchError.displayMessage, 'error');
+    }
+  });
 
   const desktopForm = (
     <>
@@ -50,16 +44,7 @@ const LienSearch = ({ isMobile }) => {
     </div>
   );
 
-  return (
-    <>
-      <FlashMessageContainer top='7rem'>
-        {flashMessagesArray.map((flashMessage, index) => {
-          return <FlashMessage {...flashMessage} key={index} />;
-        })}
-      </FlashMessageContainer>
-      {isMobile ? mobileForm : desktopForm}
-    </>
-  );
+  return isMobile ? mobileForm : desktopForm;
 };
 
 const mapSizesToProps = ({ width }) => {

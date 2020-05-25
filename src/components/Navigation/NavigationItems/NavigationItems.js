@@ -18,7 +18,7 @@ const NavigationItems = (props) => {
   }
   return (
     <ul className={classes.NavigationItems}>
-      {link}
+      {!props.dashboard && link}
       <NavigationItem link='/logout' type='secondary'>
         Logout
       </NavigationItem>

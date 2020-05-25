@@ -1,0 +1,24 @@
+.DashboardSummaryPanel {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Icon {
+  width: 5rem;
+  height: 5rem;
+}
+
+.SubTitle {
+  text-transform: capitalize;
+  color: #707070;
+  font-size: 1.4rem;
+}
+
+.Data {
+  color: #32373d;
+  font-weight: normal;
+  font-size: 2rem;
+}

@@ -3,9 +3,6 @@ import classes from './Auth.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import * as actions from '../../store/actions/index';
 import { Route, Switch } from 'react-router-dom';
-import FlashMessage, {
-  FlashMessageContainer,
-} from '../../components/UI/FlashMessage/FlashMessage';
 import axios from '../../axios-liens';
 import Login from './Login/Login';
 import PasswordReset from './PasswordReset/PasswordReset';
@@ -28,6 +25,23 @@ const Auth = () => {
     };
   }, [dispatch]);
 
+  useEffect(() => {
+    if (tokenMessage === 'Password updated') {
+      window.flash(tokenMessage, 'success');
+    } else if (tokenMessage) {
+      window.flash(tokenMessage, 'error');
+    }
+    if (error) {
+      window.flash(error, 'error');
+    }
+    if (tokenEmailed.sent) {
+      window.flash(tokenEmailed.message, tokenEmailed.type);
+    }
+    if (passwordResetError) {
+      window.flash(passwordResetError, 'error');
+    }
+  });
+
   const tokenSubmitHandler = useCallback(async (email) => {
     try {
       await axios.post('/reset', { email });
@@ -40,42 +54,10 @@ const Auth = () => {
       });
     }
   }, []);
-  const flashMessagesArray = [];
-  let flashInvalidToken = null;
-  if (tokenMessage === 'Password updated') {
-    flashInvalidToken = { type: 'success', message: tokenMessage };
-    flashMessagesArray.push(flashInvalidToken);
-  } else if (tokenMessage) {
-    flashInvalidToken = { type: 'error', message: tokenMessage };
-    flashMessagesArray.push(flashInvalidToken);
-  }
-  let flashError = null;
-  if (error) {
-    flashError = { type: 'error', message: error };
-    flashMessagesArray.push(flashError);
-  }
-  let flashTokenEmailed = null;
-  if (tokenEmailed.sent) {
-    flashTokenEmailed = {
-      type: tokenEmailed.type,
-      message: tokenEmailed.message,
-    };
-    flashMessagesArray.push(flashTokenEmailed);
-  }
-  let flashPasswordResetError = null;
-  if (passwordResetError) {
-    flashPasswordResetError = { type: 'error', message: passwordResetError };
-    flashMessagesArray.push(flashPasswordResetError);
-  }
 
   return (
     <div>
       <h1 className={classes.Title}>NJTL Database</h1>
-      <FlashMessageContainer center>
-        {flashMessagesArray.map((flashMessage, index) => {
-          return <FlashMessage {...flashMessage} key={index} />;
-        })}
-      </FlashMessageContainer>
       <Switch>
         <Route path='/auth/password_reset/:token' exact>
           <PasswordReset setError={setPasswordResetError} />

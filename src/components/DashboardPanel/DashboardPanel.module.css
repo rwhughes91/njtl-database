@@ -1,0 +1,28 @@
+.DashboardPanel {
+  background-color: #ffffff;
+  border-radius: 5px;
+  width: 25%;
+  margin: 0 0.5rem;
+}
+
+.DashboardPanelMedium {
+  width: calc(33% + 1rem);
+}
+
+.DashboardPanelLarge {
+  width: calc(50% + 1rem);
+}
+
+.DashboardContainer {
+  width: 90%;
+  height: 90%;
+  margin: 0 auto;
+}
+
+.DashboardPanelTitle {
+  width: 100%;
+  height: 10%;
+  text-align: center;
+  font-weight: normal;
+  color: #707070;
+}

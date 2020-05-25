@@ -7,12 +7,8 @@ const Layout = (props) => {
   if (props.isMobile) {
     output = props.mobilePages;
   }
-  return (
-    <main className={classes.Main}>
-      {props.flashContainer}
-      {output}
-    </main>
-  );
+
+  return <main className={classes.Main}>{output}</main>;
 };
 
 const mapSizesToProps = ({ width }) => {

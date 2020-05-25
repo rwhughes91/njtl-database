@@ -6,11 +6,12 @@ import Layout from './components/Layout/Layout';
 import Auth from './containers/Auth/Auth';
 import Logout from './containers/Auth/Logout/Logout';
 import * as actions from './store/actions/index';
-import FlashMessage, {
-  FlashMessageContainer,
-} from './components/UI/FlashMessage/FlashMessage';
+import Dashboard from './containers/Dashboard/Dashboard';
 import Spinner from './components/UI/Spinner/Spinner';
 import LazyLoadingErrorBoundary from './errorBoundaries/LazyLoadingErrorBoundary';
+import Bus from './utils/Bus';
+import Flash from './components/UI/FlashMessage/Flash';
+import classes from './components/Layout/Layout.module.css';
 
 const LienSearch = React.lazy(() =>
   import('./containers/LienSearch/LienSearch')
@@ -24,6 +25,8 @@ const UploadLiens = React.lazy(() =>
 );
 const Reports = React.lazy(() => import('./containers/Reports/Reports'));
 
+window.flash = (message, type) => Bus.emit('flash', { message, type });
+
 function App() {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.token);
@@ -32,34 +35,32 @@ function App() {
     dispatch(actions.authCheckState());
   }, [dispatch]);
 
-  const mainSpinner = (
-    <div
-      style={{
-        position: 'fixed',
-        top: '10rem',
-        left: '50%',
-      }}
-    >
+  useEffect(() => {
+    if (token) {
+      if (justLoggedIn) {
+        window.flash(justLoggedIn, 'success');
+      }
+    }
+  });
+
+  let loading = (
+    <div className={classes.Main}>
       <Spinner />
     </div>
   );
 
   let pages = (
-    <Switch>
-      <Route path='/'>
-        <Auth />
-      </Route>
-      <Redirect to='/' />
-    </Switch>
+    <>
+      <Flash />
+      <Switch>
+        <Route path='/'>
+          <Auth />
+        </Route>
+        <Redirect to='/' />
+      </Switch>
+    </>
   );
   if (token) {
-    let flashMessage = null;
-    if (justLoggedIn) {
-      flashMessage = <FlashMessage type='success' message={justLoggedIn} />;
-    }
-    const flashContainer = (
-      <FlashMessageContainer top='7rem'>{flashMessage}</FlashMessageContainer>
-    );
     const desktopPages = (
       <Switch>
         <Route path='/lien/:lien_id' exact>
@@ -76,6 +77,9 @@ function App() {
         </Route>
         <Route path='/logout'>
           <Logout />
+        </Route>
+        <Route path='/dashboard'>
+          <Dashboard />
         </Route>
         <Route path='/'>
           <LienSearch />
@@ -97,14 +101,11 @@ function App() {
     );
     pages = (
       <>
+        <Flash top='7rem' />
         <Navigation />
         <LazyLoadingErrorBoundary>
-          <Suspense fallback={mainSpinner}>
-            <Layout
-              flashContainer={flashContainer}
-              desktopPages={desktopPages}
-              mobilePages={mobilePages}
-            />
+          <Suspense fallback={loading}>
+            <Layout desktopPages={desktopPages} mobilePages={mobilePages} />
           </Suspense>
         </LazyLoadingErrorBoundary>
       </>
