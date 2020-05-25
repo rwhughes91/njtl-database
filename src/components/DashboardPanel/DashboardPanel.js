@@ -24,6 +24,7 @@ const DashboardPanel = ({
   let output = <div>test</div>;
   switch (type) {
     case 'summary':
+      classNames.push(classes.DashboardSummaryPanel);
       output = (
         <DashboardSummaryPanel
           summaryData={summaryData}

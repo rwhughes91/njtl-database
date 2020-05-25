@@ -118,7 +118,7 @@ const Dashboard = () => {
   if (dashboardData.data) {
     dashboardOutput = (
       <div className={classes.Dashboard}>
-        <div className={classes.DashboardPanelRow}>
+        <div className={classes.DashboardSummaryRow}>
           <DashboardPanel
             type='summary'
             summaryData={
