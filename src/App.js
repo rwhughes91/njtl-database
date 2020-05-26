@@ -8,6 +8,7 @@ import Logout from './containers/Auth/Logout/Logout';
 import * as actions from './store/actions/index';
 import Dashboard from './containers/Dashboard/Dashboard';
 import UploadLiens from './containers/UploadLiens/UploadLiens';
+import LienDetail from './containers/LienDetail/LienDetail';
 import Spinner from './components/UI/Spinner/Spinner';
 import LazyLoadingErrorBoundary from './errorBoundaries/LazyLoadingErrorBoundary';
 import Bus from './utils/Bus';
@@ -16,9 +17,6 @@ import classes from './components/Layout/Layout.module.css';
 
 const LienSearch = React.lazy(() =>
   import('./containers/LienSearch/LienSearch')
-);
-const LienDetail = React.lazy(() =>
-  import('./containers/LienDetail/LienDetail')
 );
 const SubBatch = React.lazy(() => import('./containers/SubBatch/SubBatch'));
 const Reports = React.lazy(() => import('./containers/Reports/Reports'));
