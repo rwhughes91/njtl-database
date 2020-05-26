@@ -7,6 +7,7 @@ import Auth from './containers/Auth/Auth';
 import Logout from './containers/Auth/Logout/Logout';
 import * as actions from './store/actions/index';
 import Dashboard from './containers/Dashboard/Dashboard';
+import UploadLiens from './containers/UploadLiens/UploadLiens';
 import Spinner from './components/UI/Spinner/Spinner';
 import LazyLoadingErrorBoundary from './errorBoundaries/LazyLoadingErrorBoundary';
 import Bus from './utils/Bus';
@@ -20,9 +21,6 @@ const LienDetail = React.lazy(() =>
   import('./containers/LienDetail/LienDetail')
 );
 const SubBatch = React.lazy(() => import('./containers/SubBatch/SubBatch'));
-const UploadLiens = React.lazy(() =>
-  import('./containers/UploadLiens/UploadLiens')
-);
 const Reports = React.lazy(() => import('./containers/Reports/Reports'));
 
 window.flash = (message, type) => Bus.emit('flash', { message, type });
