@@ -146,9 +146,13 @@ const UploadLiens = () => {
       setLiensUploading(uploadingBeginState);
       const data = new FormData();
       data.append('file', selectedFile);
-      Axios.put('http://localhost:4000/upload', data, {
-        headers: { Authorization: `Bearer ${token}` },
-      }).catch((err) => {
+      Axios.put(
+        'https://new-jersey-database-server.herokuapp.com/upload',
+        data,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      ).catch((err) => {
         setLiensUploading({
           uploading: false,
           success: false,
@@ -166,7 +170,7 @@ const UploadLiens = () => {
   }, []);
 
   const onErrorLogClickHandler = useCallback((token) => {
-    Axios.get('http://localhost:4000/upload', {
+    Axios.get('https://new-jersey-database-server.herokuapp.com/upload', {
       responseType: 'blob',
       headers: { Authorization: `Bearer ${token}` },
     })

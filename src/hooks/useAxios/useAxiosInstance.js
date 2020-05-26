@@ -7,7 +7,7 @@ const useAxiosInstance = () => {
   return useMemo(
     () =>
       axios.create({
-        baseURL: 'http://localhost:4000',
+        baseURL: 'https://new-jersey-database-server.herokuapp.com/',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
