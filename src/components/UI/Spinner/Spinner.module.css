@@ -1,54 +1,14 @@
-.Loader,
-.Loader:before,
-.Loader:after {
-  border-radius: 50%;
-}
-.Loader {
-  color: #469cd0;
-  font-size: 11px;
-  text-indent: -99999em;
-  margin: 55px auto;
-  position: relative;
-  width: 10em;
-  height: 10em;
-  box-shadow: inset 0 0 0 1em;
-  transform: translateZ(0);
-}
-.Loader:before,
-.Loader:after {
-  position: absolute;
-  content: '';
-}
-.Loader:before {
-  width: 5.2em;
-  height: 10.2em;
-  border-radius: 10.2em 0 0 10.2em;
-  top: -0.1em;
-  left: -0.1em;
-  transform-origin: 5.1em 5.1em;
-  animation: load2 2s infinite ease 1.5s;
-}
-.Loader:after {
-  width: 5.2em;
-  height: 10.2em;
-  border-radius: 0 10.2em 10.2em 0;
-  top: -0.1em;
-  left: 4.9em;
-  transform-origin: 0.1em 5.1em;
-  animation: load2 2s infinite ease;
+.Spinner {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50px;
+  border: 4px solid transparent;
+  border-top-color: #469cd0;
+  animation: load 1s linear infinite;
+  margin: 2rem auto;
 }
 
-.White::before,
-.White::after {
-  background: #ffffff;
-}
-
-.Gray::before,
-.Gray::after {
-  background: #ebeef2;
-}
-
-@keyframes load2 {
+@keyframes load {
   0% {
     transform: rotate(0deg);
   }

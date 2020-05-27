@@ -11,7 +11,13 @@ export const FlashMessageContainer = (props) => {
     });
   }
   return (
-    <div className={classes.FlashMessageContainer} style={style}>
+    <div
+      className={[
+        classes.FlashMessageContainer,
+        props.auth ? classes.AuthContainer : null,
+      ].join(' ')}
+      style={style}
+    >
       {props.children}
     </div>
   );

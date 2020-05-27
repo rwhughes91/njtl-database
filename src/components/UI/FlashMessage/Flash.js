@@ -3,7 +3,7 @@ import FlashMessage, { FlashMessageContainer } from './FlashMessage';
 import Bus from '../../../utils/Bus';
 import { v4 } from 'uuid';
 
-const Flash = ({ top }) => {
+const Flash = ({ top, center, auth }) => {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
@@ -35,7 +35,9 @@ const Flash = ({ top }) => {
     );
   });
   return (
-    <FlashMessageContainer top={top}>{flashMessages}</FlashMessageContainer>
+    <FlashMessageContainer top={top} center={center} auth={auth}>
+      {flashMessages}
+    </FlashMessageContainer>
   );
 };
 

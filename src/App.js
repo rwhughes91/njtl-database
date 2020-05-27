@@ -47,7 +47,7 @@ function App() {
 
   let pages = (
     <>
-      <Flash />
+      <Flash center={true} auth={true} />
       <Switch>
         <Route path='/'>
           <Auth />
@@ -97,7 +97,7 @@ function App() {
     );
     pages = (
       <>
-        <Flash top='7rem' />
+        <Flash top='4.8rem' />
         <Navigation />
         <LazyLoadingErrorBoundary>
           <Suspense fallback={loading}>
