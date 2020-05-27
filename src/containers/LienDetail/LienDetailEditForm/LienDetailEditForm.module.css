@@ -44,7 +44,7 @@
 }
 
 .FormRowLarge {
-  height: 200% !important;
+  height: 200%;
   position: relative;
   top: -1.5rem;
 }
@@ -198,6 +198,9 @@
   }
   .ErrorMessage {
     font-size: 0.9rem;
+  }
+  .FormRowLarge {
+    height: 50%;
   }
 }
 

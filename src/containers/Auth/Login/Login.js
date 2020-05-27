@@ -97,7 +97,8 @@ const Login = ({ sendTokenSubmitted, errorMessage }) => {
     form = (
       <>
         <form onSubmit={loginSubmitHandler} className={classes.LoginForm}>
-          {formElements}
+          {formElements.find((element) => element.key === 'email')}
+          {formElements.find((element) => element.key === 'password')}
           <Button btnType='Primary Login' disabled={!formData.formIsValid}>
             Sign In
           </Button>
@@ -117,7 +118,7 @@ const Login = ({ sendTokenSubmitted, errorMessage }) => {
           onSubmit={sendTokenSubmitHandler}
           className={[classes.LoginForm, classes.ForgotPasswordForm].join('  ')}
         >
-          {formElements.slice(0, 1)}
+          {formElements.find((element) => element.key === 'email')}
           <Button
             btnType='Primary Login'
             disabled={!formData.controls.email.valid}

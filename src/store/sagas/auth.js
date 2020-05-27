@@ -40,7 +40,9 @@ export function* authUserSaga(action) {
     );
     yield put(actions.checkAuthTimeout(res.data.expiresIn));
   } catch (err) {
-    let errorMessage = err.response.data.message;
+    let errorMessage = err.response
+      ? err.response.data.message
+      : 'Something went wrong';
     if (err.response.data.data) {
       errorMessage = err.response.data.data[0].msg;
     }

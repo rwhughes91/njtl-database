@@ -173,16 +173,49 @@ const LienDetailEditForm = ({ data, lien_id }) => {
           <div className={classes.Title}>
             <span>Lien Information</span>
           </div>
-          <div className={classes.FormColumn}>{formElements.slice(0, 4)}</div>
-          <div className={classes.FormColumn}>{formElements.slice(4, 8)}</div>
+          <div className={classes.FormColumn}>
+            {formElements.find((element) => element.key === 'lien_id')}
+            {formElements.find((element) => element.key === 'block')}
+            {formElements.find((element) => element.key === 'lot')}
+            {formElements.find((element) => element.key === 'qualifier')}
+          </div>
+          <div className={classes.FormColumn}>
+            {formElements.find(
+              (element) => element.key === 'certificate_number'
+            )}
+            {formElements.find((element) => element.key === 'address')}
+            {formElements.find((element) => element.key === 'county')}
+            {formElements.find((element) => element.key === 'sale_date')}
+          </div>
         </div>
         <div className={classes.FormType}>
           <div className={classes.Title}>
             <span>Financial Information</span>
           </div>
-          <div className={classes.FormColumn}>{formElements.slice(8, 12)}</div>
-          <div className={classes.FormColumn}>{formElements.slice(12, 16)}</div>
-          <div className={classes.FormColumn}>{formElements.slice(16, 20)}</div>
+          <div className={classes.FormColumn}>
+            {formElements.find((element) => element.key === 'recording_date')}
+            {formElements.find((element) => element.key === 'recording_fee')}
+            {formElements.find(
+              (element) => element.key === 'winning_bid_percentage'
+            )}
+            {formElements.find((element) => element.key === 'search_fee')}
+          </div>
+          <div className={classes.FormColumn}>
+            {formElements.find((element) => element.key === 'year_end_penalty')}
+            {formElements.find((element) => element.key === 'tax_amount')}
+            {formElements.find((element) => element.key === 'premium')}
+            {formElements.find(
+              (element) => element.key === 'total_principal_balance'
+            )}
+          </div>
+          <div className={classes.FormColumn}>
+            {formElements.find((element) => element.key === 'total_cash_out')}
+            {formElements.find((element) => element.key === 'flat_rate')}
+            {formElements.find((element) => element.key === 'cert_int')}
+            {formElements.find(
+              (element) => element.key === 'total_actual_interest'
+            )}
+          </div>
         </div>
       </div>
       <div className={classes.FormGroup}>
@@ -197,9 +230,17 @@ const LienDetailEditForm = ({ data, lien_id }) => {
             <span>Redemption Info</span>
           </div>
           <div className={classes.FormColumnFull}>
-            <div className={classes.FormRow}>{formElements.slice(20, 23)}</div>
+            <div className={classes.FormRow}>
+              {formElements.find((element) => element.key === 'status')}
+              {formElements.find(
+                (element) => element.key === 'redemption_date'
+              )}
+              {formElements.find(
+                (element) => element.key === 'redemption_amount'
+              )}
+            </div>
             <div className={[classes.FormRow, classes.FormRowLarge].join(' ')}>
-              {formElements.slice(23)}
+              {formElements.find((element) => element.key === 'notes')}
             </div>
             <div className={classes.FormRow}>
               <div className={classes.ButtonContainer}>

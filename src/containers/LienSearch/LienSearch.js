@@ -13,20 +13,22 @@ const LienSearch = ({ isMobile }) => {
   const lienSearchError = useSelector((state) => state.lienSearch.error);
 
   useEffect(() => {
+    if (lienDetailError) {
+      window.flash(lienDetailError.displayMessage, 'error');
+      dispatch(actions.clearLien());
+    }
+    if (lienSearchError) {
+      window.flash(lienSearchError.displayMessage, 'error');
+      dispatch(actions.clearLiens());
+    }
+  });
+
+  useEffect(() => {
     return () => {
       dispatch(actions.clearLien());
       dispatch(actions.clearLiens());
     };
   }, [dispatch]);
-
-  useEffect(() => {
-    if (lienDetailError) {
-      window.flash(lienDetailError.displayMessage, 'error');
-    }
-    if (lienSearchError) {
-      window.flash(lienSearchError.displayMessage, 'error');
-    }
-  });
 
   const desktopForm = (
     <>
