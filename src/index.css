@@ -15,3 +15,7 @@ body {
   font-family: 'Open Sans', sans-serif;
   background-color: #ebeef2;
 }
+
+textarea {
+  resize: none;
+}
