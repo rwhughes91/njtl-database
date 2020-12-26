@@ -146,7 +146,7 @@ const UploadLiens = () => {
       setLiensUploading(uploadingBeginState);
       const data = new FormData();
       data.append('file', selectedFile);
-      Axios.put(`${process.env.REACT_APP_SERVER_URL}/upload`, data, {
+      Axios.put(`${process.env.REACT_APP_AWS_SERVER_URL}/upload`, data, {
         headers: { Authorization: `Bearer ${token}` },
       }).catch((err) => {
         setLiensUploading({
