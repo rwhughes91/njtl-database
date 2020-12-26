@@ -146,13 +146,9 @@ const UploadLiens = () => {
       setLiensUploading(uploadingBeginState);
       const data = new FormData();
       data.append('file', selectedFile);
-      Axios.put(
-        'https://new-jersey-database-server.herokuapp.com/upload',
-        data,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      ).catch((err) => {
+      Axios.put(`${process.env.REACT_APP_SERVER_URL}/upload`, data, {
+        headers: { Authorization: `Bearer ${token}` },
+      }).catch((err) => {
         setLiensUploading({
           uploading: false,
           success: false,

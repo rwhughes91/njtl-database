@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
 
-const socket = io('https://new-jersey-database-server.herokuapp.com/');
+const socket = io(process.env.REACT_APP_SERVER_URL);
 
 export default socket;
