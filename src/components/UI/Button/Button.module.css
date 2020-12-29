@@ -10,6 +10,7 @@
   transition: transform 0.2s;
   font-weight: bold;
   border-radius: 5px;
+  font-size: 1.2rem;
 }
 
 .Button:hover {
