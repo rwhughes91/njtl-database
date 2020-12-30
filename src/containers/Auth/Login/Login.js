@@ -105,10 +105,13 @@ const Login = ({ sendTokenSubmitted, errorMessage }) => {
         </form>
         <button
           onClick={toggleForgotPassword}
-          className={classes.ForgotPassword}
+          className={[classes.ForgotPassword, classes.Absolute].join(' ')}
         >
           Forgot password?
         </button>
+        {/* <button className={[classes.ForgotPassword, classes.Guest].join(' ')}>
+          Continue as guest
+        </button> */}
       </>
     );
   } else if (!authenticating && forgotPassword) {

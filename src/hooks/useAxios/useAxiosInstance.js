@@ -7,7 +7,7 @@ const useAxiosInstance = () => {
   return useMemo(
     () =>
       axios.create({
-        baseURL: process.env.REACT_APP_AWS_SERVER_URL,
+        baseURL: process.env.REACT_APP_SERVER_URL,
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,

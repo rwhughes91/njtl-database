@@ -27,6 +27,12 @@
   margin-bottom: 3rem;
 }
 
+.Guest {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 .LoginForm.ForgotPasswordForm {
   height: 14rem;
 }
@@ -86,10 +92,13 @@
   opacity: 0;
 }
 
-.ForgotPassword {
+.Absolute {
   position: absolute;
   top: 19rem;
   right: 4rem;
+}
+
+.ForgotPassword {
   padding: 0;
   text-decoration: none;
   cursor: pointer;
